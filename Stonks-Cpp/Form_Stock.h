@@ -65,10 +65,10 @@ namespace $safeprojectname$ {
 		void InitializeComponent(void)
 		{
 			this->components = (gcnew System::ComponentModel::Container());
-			System::Windows::Forms::DataVisualization::Charting::ChartArea^ chartArea5 = (gcnew System::Windows::Forms::DataVisualization::Charting::ChartArea());
-			System::Windows::Forms::DataVisualization::Charting::ChartArea^ chartArea6 = (gcnew System::Windows::Forms::DataVisualization::Charting::ChartArea());
-			System::Windows::Forms::DataVisualization::Charting::Series^ series5 = (gcnew System::Windows::Forms::DataVisualization::Charting::Series());
-			System::Windows::Forms::DataVisualization::Charting::Series^ series6 = (gcnew System::Windows::Forms::DataVisualization::Charting::Series());
+			System::Windows::Forms::DataVisualization::Charting::ChartArea^ chartArea1 = (gcnew System::Windows::Forms::DataVisualization::Charting::ChartArea());
+			System::Windows::Forms::DataVisualization::Charting::ChartArea^ chartArea2 = (gcnew System::Windows::Forms::DataVisualization::Charting::ChartArea());
+			System::Windows::Forms::DataVisualization::Charting::Series^ series1 = (gcnew System::Windows::Forms::DataVisualization::Charting::Series());
+			System::Windows::Forms::DataVisualization::Charting::Series^ series2 = (gcnew System::Windows::Forms::DataVisualization::Charting::Series());
 			this->openFileDialog_LoadStock = (gcnew System::Windows::Forms::OpenFileDialog());
 			this->button_LoadStock = (gcnew System::Windows::Forms::Button());
 			this->dataGridView_StockGrid = (gcnew System::Windows::Forms::DataGridView());
@@ -101,6 +101,7 @@ namespace $safeprojectname$ {
 			this->dataGridView_StockGrid->ColumnHeadersHeightSizeMode = System::Windows::Forms::DataGridViewColumnHeadersHeightSizeMode::AutoSize;
 			this->dataGridView_StockGrid->Location = System::Drawing::Point(35, 34);
 			this->dataGridView_StockGrid->Name = L"dataGridView_StockGrid";
+			this->dataGridView_StockGrid->RowHeadersWidth = 62;
 			this->dataGridView_StockGrid->Size = System::Drawing::Size(1185, 195);
 			this->dataGridView_StockGrid->TabIndex = 1;
 			// 
@@ -131,29 +132,30 @@ namespace $safeprojectname$ {
 			// 
 			// chart1
 			// 
-			chartArea5->Name = L"Chart_OHLC";
-			chartArea6->Name = L"Chart_Volume";
-			this->chart1->ChartAreas->Add(chartArea5);
-			this->chart1->ChartAreas->Add(chartArea6);
+			chartArea1->AlignWithChartArea = L"Chart_Volume";
+			chartArea1->Name = L"Chart_OHLC";
+			chartArea2->Name = L"Chart_Volume";
+			this->chart1->ChartAreas->Add(chartArea1);
+			this->chart1->ChartAreas->Add(chartArea2);
 			this->chart1->DataSource = this->bindingSource_CandlestickList;
 			this->chart1->Location = System::Drawing::Point(35, 249);
 			this->chart1->Name = L"chart1";
-			series5->ChartArea = L"Chart_OHLC";
-			series5->ChartType = System::Windows::Forms::DataVisualization::Charting::SeriesChartType::Candlestick;
-			series5->CustomProperties = L"PriceDownColor=Red, PriceUpColor=Lime";
-			series5->Name = L"Series1";
-			series5->XValueMember = L"Date";
-			series5->XValueType = System::Windows::Forms::DataVisualization::Charting::ChartValueType::Date;
-			series5->YValueMembers = L"High,Low,Open,Close";
-			series5->YValuesPerPoint = 4;
-			series5->YValueType = System::Windows::Forms::DataVisualization::Charting::ChartValueType::Double;
-			series6->ChartArea = L"Chart_Volume";
-			series6->Name = L"Series2";
-			series6->XValueMember = L"Date";
-			series6->XValueType = System::Windows::Forms::DataVisualization::Charting::ChartValueType::DateTime;
-			series6->YValueMembers = L"Volume";
-			this->chart1->Series->Add(series5);
-			this->chart1->Series->Add(series6);
+			series1->ChartArea = L"Chart_OHLC";
+			series1->ChartType = System::Windows::Forms::DataVisualization::Charting::SeriesChartType::Candlestick;
+			series1->CustomProperties = L"PriceDownColor=Red, PriceUpColor=Lime";
+			series1->Name = L"Series1";
+			series1->XValueMember = L"Date";
+			series1->XValueType = System::Windows::Forms::DataVisualization::Charting::ChartValueType::Date;
+			series1->YValueMembers = L"High,Low,Open,Close";
+			series1->YValuesPerPoint = 4;
+			series1->YValueType = System::Windows::Forms::DataVisualization::Charting::ChartValueType::Double;
+			series2->ChartArea = L"Chart_Volume";
+			series2->Name = L"Series2";
+			series2->XValueMember = L"Date";
+			series2->XValueType = System::Windows::Forms::DataVisualization::Charting::ChartValueType::DateTime;
+			series2->YValueMembers = L"Volume";
+			this->chart1->Series->Add(series1);
+			this->chart1->Series->Add(series2);
 			this->chart1->Size = System::Drawing::Size(1185, 389);
 			this->chart1->TabIndex = 5;
 			this->chart1->Text = L"chart1";
@@ -162,7 +164,7 @@ namespace $safeprojectname$ {
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
-			this->ClientSize = System::Drawing::Size(1267, 775);
+			this->ClientSize = System::Drawing::Size(1245, 681);
 			this->Controls->Add(this->chart1);
 			this->Controls->Add(this->button_Refresh);
 			this->Controls->Add(this->dateTimePicker_DateBegin);
