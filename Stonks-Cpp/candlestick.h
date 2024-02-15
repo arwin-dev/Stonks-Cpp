@@ -1,18 +1,17 @@
 #pragma once
 
 
-namespace $safeprojectname$ {
+namespace Stonks {
     using namespace System;
-    ref class candlestick
+    public ref class candlestick
     {
         public:
-
-            property DateTime date;
-            property double open;
-            property double high;
-            property double low;
-            property double close;
-            property unsigned long volume;
+            property DateTime Date;
+            property double Open;
+            property double High;
+            property double Low;
+            property double Close;
+            property unsigned long long Volume;
 
             candlestick(String^ line);
     };

@@ -1,6 +1,6 @@
 #include "Form_Stock.h"
 #include "candlestick.h"
-using namespace $safeprojectname$;
+using namespace Stonks;
 
 using namespace System;
 using namespace System::Windows::Forms;
@@ -10,11 +10,11 @@ using namespace System::Windows::Forms;
 void main(array<String^>^ args) {
 	Application::EnableVisualStyles();
 	Application::SetCompatibleTextRenderingDefault(false);
-	$safeprojectname$::MyForm form;
+	Stonks::Form_StockPicker form;
 	Application::Run(% form);
 }
 
-List<candlestick^>^ MyForm::setDateRangeForCandlesticks(List<candlestick^>^ allCandlesticks, DateTime startDate, DateTime endDate)
+List<candlestick^>^ Form_StockPicker::setDateRangeForCandlesticks(List<candlestick^>^ allCandlesticks, DateTime startDate, DateTime endDate)
 {
 	List<candlestick^>^ filteredCandlesticks = gcnew List<candlestick^>(allCandlesticks->Count);
 
@@ -23,9 +23,9 @@ List<candlestick^>^ MyForm::setDateRangeForCandlesticks(List<candlestick^>^ allC
 
 		for each (candlestick ^ cs in allCandlesticks)
 		{
-			if (cs->date > dateTimePicker_DateEnd->Value) break;
+			if (cs->Date > dateTimePicker_DateEnd->Value) break;
 
-			if (cs->date >= dateTimePicker_DateBegin->Value)
+			if (cs->Date >= dateTimePicker_DateBegin->Value)
 			{
 				filteredCandlesticks->Add(cs);
 			}
@@ -34,7 +34,7 @@ List<candlestick^>^ MyForm::setDateRangeForCandlesticks(List<candlestick^>^ allC
 	return filteredCandlesticks;
 }
 
-List<candlestick^>^ MyForm::getStockDataFromFilename(String^ filename)
+List<candlestick^>^ Form_StockPicker::getStockDataFromFilename(String^ filename)
 {
 	List<candlestick^>^ listOfCandlesticks = gcnew List<candlestick^>(1024);
 	StreamReader^ sr = gcnew StreamReader(filename);
