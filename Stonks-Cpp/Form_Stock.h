@@ -207,7 +207,7 @@ namespace $safeprojectname$ {
 		private: void getStockDataFromFilename()
 		{
 			this->Text = openFileDialog_LoadStock->FileName;
-			allCandlesticks = getStockDataFromFilename(openFileDialog_LoadStock->);
+			allCandlesticks = getStockDataFromFilename(openFileDialog_LoadStock->FileName);
 		}
 
 		private: void setDateRangeForCandlesticks()
