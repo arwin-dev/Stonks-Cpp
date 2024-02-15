@@ -33,7 +33,8 @@ namespace $safeprojectname$ {
 	private:
 			List<candlestick^>^ allCandlesticks;
 	private: System::Windows::Forms::Button^ button_Refresh;
-	private: System::Windows::Forms::DataVisualization::Charting::Chart^ chart1;
+	private: System::Windows::Forms::DataVisualization::Charting::Chart^ chart_StockChart;
+
 		   BindingList<candlestick^>^ bindingCandlesticks = gcnew BindingList<candlestick^>();
 		protected:
 			/// <summary>
@@ -76,10 +77,10 @@ namespace $safeprojectname$ {
 			this->dateTimePicker_DateBegin = (gcnew System::Windows::Forms::DateTimePicker());
 			this->bindingSource_CandlestickList = (gcnew System::Windows::Forms::BindingSource(this->components));
 			this->button_Refresh = (gcnew System::Windows::Forms::Button());
-			this->chart1 = (gcnew System::Windows::Forms::DataVisualization::Charting::Chart());
+			this->chart_StockChart = (gcnew System::Windows::Forms::DataVisualization::Charting::Chart());
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dataGridView_StockGrid))->BeginInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->bindingSource_CandlestickList))->BeginInit();
-			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->chart1))->BeginInit();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->chart_StockChart))->BeginInit();
 			this->SuspendLayout();
 			// 
 			// openFileDialog_LoadStock
@@ -88,9 +89,9 @@ namespace $safeprojectname$ {
 			// 
 			// button_LoadStock
 			// 
-			this->button_LoadStock->Location = System::Drawing::Point(673, 702);
+			this->button_LoadStock->Location = System::Drawing::Point(1256, 170);
 			this->button_LoadStock->Name = L"button_LoadStock";
-			this->button_LoadStock->Size = System::Drawing::Size(110, 27);
+			this->button_LoadStock->Size = System::Drawing::Size(200, 22);
 			this->button_LoadStock->TabIndex = 0;
 			this->button_LoadStock->Text = L"LOAD";
 			this->button_LoadStock->UseVisualStyleBackColor = true;
@@ -107,14 +108,14 @@ namespace $safeprojectname$ {
 			// 
 			// dateTimePicker_DateEnd
 			// 
-			this->dateTimePicker_DateEnd->Location = System::Drawing::Point(213, 702);
+			this->dateTimePicker_DateEnd->Location = System::Drawing::Point(1256, 106);
 			this->dateTimePicker_DateEnd->Name = L"dateTimePicker_DateEnd";
 			this->dateTimePicker_DateEnd->Size = System::Drawing::Size(200, 20);
 			this->dateTimePicker_DateEnd->TabIndex = 2;
 			// 
 			// dateTimePicker_DateBegin
 			// 
-			this->dateTimePicker_DateBegin->Location = System::Drawing::Point(213, 663);
+			this->dateTimePicker_DateBegin->Location = System::Drawing::Point(1256, 65);
 			this->dateTimePicker_DateBegin->Name = L"dateTimePicker_DateBegin";
 			this->dateTimePicker_DateBegin->Size = System::Drawing::Size(200, 20);
 			this->dateTimePicker_DateBegin->TabIndex = 3;
@@ -122,31 +123,31 @@ namespace $safeprojectname$ {
 			// 
 			// button_Refresh
 			// 
-			this->button_Refresh->Location = System::Drawing::Point(514, 701);
+			this->button_Refresh->Location = System::Drawing::Point(1256, 137);
 			this->button_Refresh->Name = L"button_Refresh";
-			this->button_Refresh->Size = System::Drawing::Size(110, 27);
+			this->button_Refresh->Size = System::Drawing::Size(200, 22);
 			this->button_Refresh->TabIndex = 4;
 			this->button_Refresh->Text = L"Refresh";
 			this->button_Refresh->UseVisualStyleBackColor = true;
 			this->button_Refresh->Click += gcnew System::EventHandler(this, &MyForm::button_Refresh_Click);
 			// 
-			// chart1
+			// chart_StockChart
 			// 
 			chartArea1->AlignWithChartArea = L"Chart_Volume";
 			chartArea1->Name = L"Chart_OHLC";
 			chartArea2->Name = L"Chart_Volume";
-			this->chart1->ChartAreas->Add(chartArea1);
-			this->chart1->ChartAreas->Add(chartArea2);
-			this->chart1->DataSource = this->bindingSource_CandlestickList;
-			this->chart1->Location = System::Drawing::Point(35, 249);
-			this->chart1->Name = L"chart1";
+			this->chart_StockChart->ChartAreas->Add(chartArea1);
+			this->chart_StockChart->ChartAreas->Add(chartArea2);
+			this->chart_StockChart->DataSource = this->bindingSource_CandlestickList;
+			this->chart_StockChart->Location = System::Drawing::Point(35, 249);
+			this->chart_StockChart->Name = L"chart_StockChart";
 			series1->ChartArea = L"Chart_OHLC";
 			series1->ChartType = System::Windows::Forms::DataVisualization::Charting::SeriesChartType::Candlestick;
 			series1->CustomProperties = L"PriceDownColor=Red, PriceUpColor=Lime";
 			series1->Name = L"Series1";
 			series1->XValueMember = L"Date";
 			series1->XValueType = System::Windows::Forms::DataVisualization::Charting::ChartValueType::Date;
-			series1->YValueMembers = L"High,Low,Open,Close";
+			series1->YValueMembers = L"high, low, open, close";
 			series1->YValuesPerPoint = 4;
 			series1->YValueType = System::Windows::Forms::DataVisualization::Charting::ChartValueType::Double;
 			series2->ChartArea = L"Chart_Volume";
@@ -154,18 +155,18 @@ namespace $safeprojectname$ {
 			series2->XValueMember = L"Date";
 			series2->XValueType = System::Windows::Forms::DataVisualization::Charting::ChartValueType::DateTime;
 			series2->YValueMembers = L"Volume";
-			this->chart1->Series->Add(series1);
-			this->chart1->Series->Add(series2);
-			this->chart1->Size = System::Drawing::Size(1185, 389);
-			this->chart1->TabIndex = 5;
-			this->chart1->Text = L"chart1";
+			this->chart_StockChart->Series->Add(series1);
+			this->chart_StockChart->Series->Add(series2);
+			this->chart_StockChart->Size = System::Drawing::Size(1185, 566);
+			this->chart_StockChart->TabIndex = 5;
+			this->chart_StockChart->Text = L"chart1";
 			// 
 			// MyForm
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
-			this->ClientSize = System::Drawing::Size(1245, 681);
-			this->Controls->Add(this->chart1);
+			this->ClientSize = System::Drawing::Size(1478, 846);
+			this->Controls->Add(this->chart_StockChart);
 			this->Controls->Add(this->button_Refresh);
 			this->Controls->Add(this->dateTimePicker_DateBegin);
 			this->Controls->Add(this->dateTimePicker_DateEnd);
@@ -175,11 +176,17 @@ namespace $safeprojectname$ {
 			this->Text = L"Stonks";
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dataGridView_StockGrid))->EndInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->bindingSource_CandlestickList))->EndInit();
-			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->chart1))->EndInit();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->chart_StockChart))->EndInit();
 			this->ResumeLayout(false);
 
 		}
 #pragma endregion
+
+		private:
+			List<candlestick^>^ getStockDataFromFilename(String^ filename);
+			List<candlestick^>^ setDateRangeForCandlesticks(List<candlestick^>^ allCandlesticks, DateTime startDate, DateTime endDate);
+
+
 		private: System::Void button_LoadStock_Click(System::Object^ sender, System::EventArgs^ e) 
 		{
 			openFileDialog_LoadStock->Filter = "Month Files|*-Month.csv|Week Files|*-Week.csv|Day Files|*-Day.csv|All Files |*.*";;
@@ -189,52 +196,41 @@ namespace $safeprojectname$ {
 		private: System::Void openFileDialog_LoadStock_FileOk(System::Object^ sender, System::ComponentModel::CancelEventArgs^ e) 
 		{
 			
-			allCandlesticks = getStockDataFromFilename(openFileDialog_LoadStock->FileName);
-			this->Text = openFileDialog_LoadStock->FileName;
+			getStockDataFromFilename();
+
 			setDateRangeForCandlesticks();
+
+			updateForm();
 		}
 
-		List<candlestick^>^ getStockDataFromFilename(String^ filename)
+	
+		private: void getStockDataFromFilename()
 		{
-			List<candlestick^>^ listOfCandlesticks = gcnew List<candlestick^>(1024);
-			StreamReader^ sr = gcnew StreamReader(filename);
+			this->Text = openFileDialog_LoadStock->FileName;
+			allCandlesticks = getStockDataFromFilename(openFileDialog_LoadStock->FileName);
+		}
 
-			String^ header = sr->ReadLine();
-
-			String^ line;
-			while ((line = sr->ReadLine()) != nullptr)
+		private: void setDateRangeForCandlesticks()
+		{
+			List<candlestick^>^ filteredCandlesticks = gcnew List<candlestick^>(allCandlesticks->Count);
+			filteredCandlesticks = setDateRangeForCandlesticks(allCandlesticks, dateTimePicker_DateBegin->Value, dateTimePicker_DateEnd->Value);
+			for each (candlestick ^ cs in filteredCandlesticks)
 			{
-				listOfCandlesticks->Add(gcnew candlestick(line));
+				bindingCandlesticks->Add(cs);
 			}
-
-			
-			return listOfCandlesticks;
 		}
 
-		void setDateRangeForCandlesticks()
+		private: void updateForm()
 		{
-			if (allCandlesticks != nullptr && allCandlesticks->Count > 0) {
-				bindingCandlesticks->Clear();
-
-				for each (candlestick ^ cs in allCandlesticks)
-				{
-					if (cs->date > dateTimePicker_DateEnd->Value) break;
-
-					if (cs->date >= dateTimePicker_DateBegin->Value)
-					{
-						bindingCandlesticks->Add(cs);
-					}
-				}
-
-				dataGridView_StockGrid->DataSource = bindingCandlesticks;
-				chart1->DataSource = bindingCandlesticks;
-				chart1->DataBind();
-			}
+			dataGridView_StockGrid->DataSource = bindingCandlesticks;
+			chart_StockChart->DataSource = bindingCandlesticks;
+			chart_StockChart->DataBind();
 		}
 
 		private: System::Void button_Refresh_Click(System::Object^ sender, System::EventArgs^ e) 
 		{
 			setDateRangeForCandlesticks();
+			updateForm();
 		}
 };
 }
