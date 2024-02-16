@@ -87,6 +87,7 @@ namespace Stonks {
 			// 
 			// openFileDialog_LoadStock
 			// 
+			this->openFileDialog_LoadStock->Filter = L"All Files |*.*|Month Files|*-Month.csv|Week Files|*-Week.csv|Day Files|*-Day.csv";
 			this->openFileDialog_LoadStock->FileOk += gcnew System::ComponentModel::CancelEventHandler(this, &Form_StockPicker::openFileDialog_LoadStock_FileOk);
 			// 
 			// button_LoadStock
@@ -192,7 +193,7 @@ namespace Stonks {
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(9, 20);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
-			this->ClientSize = System::Drawing::Size(2217, 1302);
+			this->ClientSize = System::Drawing::Size(1877, 1302);
 			this->Controls->Add(this->label_EndDate);
 			this->Controls->Add(this->label_StartDate);
 			this->Controls->Add(this->chart_StockChart);
@@ -216,56 +217,20 @@ namespace Stonks {
 			List<candlestick^>^ allCandlesticks;
 			BindingList<candlestick^>^ bindingCandlesticks = gcnew BindingList<candlestick^>();
 
-		private:
-			List<candlestick^>^ getStockDataFromFilename(String^ filename);
-			List<candlestick^>^ setDateRangeForCandlesticks(List<candlestick^>^ allCandlesticks, DateTime startDate, DateTime endDate);
+		private: List<candlestick^>^ getStockDataFromFilename(String^ filename);
 
+		private: BindingList<candlestick^>^ setDateRangeForCandlesticks(List<candlestick^>^ allCandlesticks, DateTime startDate, DateTime endDate);
 
-		private: System::Void button_LoadStock_Click(System::Object^ sender, System::EventArgs^ e) 
-		{
-			openFileDialog_LoadStock->Filter = "Month Files|*-Month.csv|Week Files|*-Week.csv|Day Files|*-Day.csv|All Files |*.*";;
-			openFileDialog_LoadStock->ShowDialog();
-		}
+		private: System::Void button_LoadStock_Click(System::Object^ sender, System::EventArgs^ e);
 
-		private: System::Void openFileDialog_LoadStock_FileOk(System::Object^ sender, System::ComponentModel::CancelEventArgs^ e) 
-		{
-			
-			getStockDataFromFilename();
-
-			setDateRangeForCandlesticks();
-
-			updateDisplay();
-		}
-
+		private: System::Void openFileDialog_LoadStock_FileOk(System::Object^ sender, System::ComponentModel::CancelEventArgs^ e);
 	
-		private: void getStockDataFromFilename()
-		{
-			this->Text = openFileDialog_LoadStock->FileName;
-			allCandlesticks = getStockDataFromFilename(openFileDialog_LoadStock->FileName);
-		}
+		private: void getStockDataFromFilename();
 
-		private: void setDateRangeForCandlesticks()
-		{
-			bindingCandlesticks->Clear();
-			List<candlestick^>^ filteredCandlesticks = gcnew List<candlestick^>(allCandlesticks->Count);
-			filteredCandlesticks = setDateRangeForCandlesticks(allCandlesticks, dateTimePicker_DateBegin->Value, dateTimePicker_DateEnd->Value);
-			for each (candlestick ^ cs in filteredCandlesticks)
-			{
-				bindingCandlesticks->Add(cs);
-			}
-		}
+		private: void setDateRangeForCandlesticks();
 
-		private: void updateDisplay()
-		{
-			dataGridView_StockGrid->DataSource = bindingCandlesticks;
-			chart_StockChart->DataSource = bindingCandlesticks;
-			chart_StockChart->DataBind();
-		}
+		private: void updateDisplay();
 
-		private: System::Void button_Refresh_Click(System::Object^ sender, System::EventArgs^ e) 
-		{
-			setDateRangeForCandlesticks();
-			updateDisplay();
-		}
+		private: System::Void button_Refresh_Click(System::Object^ sender, System::EventArgs^ e);
 };
 }

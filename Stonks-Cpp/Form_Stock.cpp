@@ -14,9 +14,47 @@ void main(array<String^>^ args) {
 	Application::Run(% form);
 }
 
-List<candlestick^>^ Form_StockPicker::setDateRangeForCandlesticks(List<candlestick^>^ allCandlesticks, DateTime startDate, DateTime endDate)
+void Form_StockPicker::getStockDataFromFilename()
 {
-	List<candlestick^>^ filteredCandlesticks = gcnew List<candlestick^>(allCandlesticks->Count);
+	this->Text = openFileDialog_LoadStock->FileName;
+	allCandlesticks = getStockDataFromFilename(openFileDialog_LoadStock->FileName);
+}
+
+void Form_StockPicker::setDateRangeForCandlesticks()
+{
+	bindingCandlesticks = setDateRangeForCandlesticks(allCandlesticks, dateTimePicker_DateBegin->Value, dateTimePicker_DateEnd->Value);
+}
+
+void Form_StockPicker::updateDisplay()
+{
+	dataGridView_StockGrid->DataSource = bindingCandlesticks;
+	chart_StockChart->DataSource = bindingCandlesticks;
+	chart_StockChart->DataBind();
+}
+
+System::Void Form_StockPicker::button_LoadStock_Click(System::Object^ sender, System::EventArgs^ e)
+{
+	openFileDialog_LoadStock->ShowDialog();
+}
+
+System::Void Form_StockPicker::openFileDialog_LoadStock_FileOk(System::Object^ sender, System::ComponentModel::CancelEventArgs^ e)
+{
+	getStockDataFromFilename();
+
+	setDateRangeForCandlesticks();
+
+	updateDisplay();
+}
+
+System::Void Form_StockPicker::button_Refresh_Click(System::Object^ sender, System::EventArgs^ e)
+{
+	setDateRangeForCandlesticks();
+	updateDisplay();
+}
+
+BindingList<candlestick^>^ Form_StockPicker::setDateRangeForCandlesticks(List<candlestick^>^ allCandlesticks, DateTime startDate, DateTime endDate)
+{
+	BindingList<candlestick^>^ filteredCandlesticks = gcnew BindingList<candlestick^>();
 
 	if (allCandlesticks != nullptr && allCandlesticks->Count > 0) {
 		bindingCandlesticks->Clear();
@@ -46,7 +84,6 @@ List<candlestick^>^ Form_StockPicker::getStockDataFromFilename(String^ filename)
 	{
 		listOfCandlesticks->Add(gcnew candlestick(line));
 	}
-
 
 	return listOfCandlesticks;
 }
