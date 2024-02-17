@@ -214,23 +214,43 @@ namespace Stonks {
 		}
 #pragma endregion
 		private:
+
+			// List of candlesticks containing all the data read from the file.
+			// This list is populated when loading stock data from a file.
 			List<candlestick^>^ allCandlesticks;
+
+			// Binding list of candlesticks used for data binding with UI controls.
 			BindingList<candlestick^>^ bindingCandlesticks = gcnew BindingList<candlestick^>();
 
-		private: List<candlestick^>^ getStockDataFromFilename(String^ filename);
+			// Reads stock data from the specified file and returns it as a list of candlesticks.
+			private: List<candlestick^>^ getStockDataFromFilename(String^ filename);
 
-		private: BindingList<candlestick^>^ setDateRangeForCandlesticks(List<candlestick^>^ allCandlesticks, DateTime startDate, DateTime endDate);
+			// Filters the candlesticks data based on the specified date range.
+			private: BindingList<candlestick^>^ filterCandlesticksByDate(List<candlestick^>^ allCandlesticks, DateTime startDate, DateTime endDate);
 
-		private: System::Void button_LoadStock_Click(System::Object^ sender, System::EventArgs^ e);
+			// Event handler for the button_LoadStock click event. Shows the openFileDialog_LoadStock dialog.
+			private: System::Void button_LoadStock_Click(System::Object^ sender, System::EventArgs^ e);
 
-		private: System::Void openFileDialog_LoadStock_FileOk(System::Object^ sender, System::ComponentModel::CancelEventArgs^ e);
-	
-		private: void getStockDataFromFilename();
+			// Event handler for the openFileDialog_LoadStock FileOk event. 
+			// Calls getStockDataFromFilename, filterCandlesticksByDate, and updateDisplay to load, filter, and display stock data.
+			private: System::Void openFileDialog_LoadStock_FileOk(System::Object^ sender, System::ComponentModel::CancelEventArgs^ e);
 
-		private: void setDateRangeForCandlesticks();
+			// Extracts stock data from the selected file and updates the form's title with the file name.
+			private: void getStockDataFromFilename();
 
-		private: void updateDisplay();
+			// Filters the candlesticks data based on the specified date range.
+			private: void filterCandlesticksByDate();
 
-		private: System::Void button_Refresh_Click(System::Object^ sender, System::EventArgs^ e);
+			// Updates the display by binding the candlestick data to the dataGridView_StockGrid and chart_StockChart.
+			private: void updateDisplay();
+
+			// Event handler for the button_Refresh click event. 
+			// Calls filterCandlesticksByDate and updateDisplay to update the displayed data.
+			private: System::Void button_Refresh_Click(System::Object^ sender, System::EventArgs^ e);
+
+
+
+
+
 };
 }
