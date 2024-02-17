@@ -92,10 +92,9 @@ namespace Stonks {
 			// 
 			// button_LoadStock
 			// 
-			this->button_LoadStock->Location = System::Drawing::Point(1499, 207);
-			this->button_LoadStock->Margin = System::Windows::Forms::Padding(4, 5, 4, 5);
+			this->button_LoadStock->Location = System::Drawing::Point(999, 135);
 			this->button_LoadStock->Name = L"button_LoadStock";
-			this->button_LoadStock->Size = System::Drawing::Size(300, 58);
+			this->button_LoadStock->Size = System::Drawing::Size(200, 38);
 			this->button_LoadStock->TabIndex = 0;
 			this->button_LoadStock->Text = L"LOAD";
 			this->button_LoadStock->UseVisualStyleBackColor = true;
@@ -104,36 +103,32 @@ namespace Stonks {
 			// dataGridView_StockGrid
 			// 
 			this->dataGridView_StockGrid->ColumnHeadersHeightSizeMode = System::Windows::Forms::DataGridViewColumnHeadersHeightSizeMode::AutoSize;
-			this->dataGridView_StockGrid->Location = System::Drawing::Point(52, 52);
-			this->dataGridView_StockGrid->Margin = System::Windows::Forms::Padding(4, 5, 4, 5);
+			this->dataGridView_StockGrid->Location = System::Drawing::Point(35, 34);
 			this->dataGridView_StockGrid->Name = L"dataGridView_StockGrid";
 			this->dataGridView_StockGrid->RowHeadersWidth = 62;
-			this->dataGridView_StockGrid->Size = System::Drawing::Size(1382, 300);
+			this->dataGridView_StockGrid->Size = System::Drawing::Size(921, 195);
 			this->dataGridView_StockGrid->TabIndex = 1;
 			// 
 			// dateTimePicker_DateEnd
 			// 
-			this->dateTimePicker_DateEnd->Location = System::Drawing::Point(1501, 159);
-			this->dateTimePicker_DateEnd->Margin = System::Windows::Forms::Padding(4, 5, 4, 5);
+			this->dateTimePicker_DateEnd->Location = System::Drawing::Point(1001, 103);
 			this->dateTimePicker_DateEnd->Name = L"dateTimePicker_DateEnd";
-			this->dateTimePicker_DateEnd->Size = System::Drawing::Size(298, 26);
+			this->dateTimePicker_DateEnd->Size = System::Drawing::Size(200, 20);
 			this->dateTimePicker_DateEnd->TabIndex = 2;
 			// 
 			// dateTimePicker_DateBegin
 			// 
-			this->dateTimePicker_DateBegin->Location = System::Drawing::Point(1501, 82);
-			this->dateTimePicker_DateBegin->Margin = System::Windows::Forms::Padding(4, 5, 4, 5);
+			this->dateTimePicker_DateBegin->Location = System::Drawing::Point(1001, 53);
 			this->dateTimePicker_DateBegin->Name = L"dateTimePicker_DateBegin";
-			this->dateTimePicker_DateBegin->Size = System::Drawing::Size(298, 26);
+			this->dateTimePicker_DateBegin->Size = System::Drawing::Size(200, 20);
 			this->dateTimePicker_DateBegin->TabIndex = 3;
 			this->dateTimePicker_DateBegin->Value = System::DateTime(2019, 1, 15, 0, 0, 0, 0);
 			// 
 			// button_Refresh
 			// 
-			this->button_Refresh->Location = System::Drawing::Point(1501, 275);
-			this->button_Refresh->Margin = System::Windows::Forms::Padding(4, 5, 4, 5);
+			this->button_Refresh->Location = System::Drawing::Point(1001, 179);
 			this->button_Refresh->Name = L"button_Refresh";
-			this->button_Refresh->Size = System::Drawing::Size(300, 58);
+			this->button_Refresh->Size = System::Drawing::Size(200, 38);
 			this->button_Refresh->TabIndex = 4;
 			this->button_Refresh->Text = L"Refresh";
 			this->button_Refresh->UseVisualStyleBackColor = true;
@@ -148,8 +143,7 @@ namespace Stonks {
 			this->chart_StockChart->ChartAreas->Add(chartArea1);
 			this->chart_StockChart->ChartAreas->Add(chartArea2);
 			this->chart_StockChart->DataSource = this->bindingSource_CandlestickList;
-			this->chart_StockChart->Location = System::Drawing::Point(52, 383);
-			this->chart_StockChart->Margin = System::Windows::Forms::Padding(4, 5, 4, 5);
+			this->chart_StockChart->Location = System::Drawing::Point(35, 249);
 			this->chart_StockChart->Name = L"chart_StockChart";
 			series1->ChartArea = L"Chart_OHLC";
 			series1->ChartType = System::Windows::Forms::DataVisualization::Charting::SeriesChartType::Candlestick;
@@ -163,37 +157,39 @@ namespace Stonks {
 			series2->ChartArea = L"Chart_Volume";
 			series2->Name = L"Series2";
 			series2->XValueMember = L"Date";
-			series2->XValueType = System::Windows::Forms::DataVisualization::Charting::ChartValueType::DateTime;
+			series2->XValueType = System::Windows::Forms::DataVisualization::Charting::ChartValueType::Date;
 			series2->YValueMembers = L"Volume";
 			this->chart_StockChart->Series->Add(series1);
 			this->chart_StockChart->Series->Add(series2);
-			this->chart_StockChart->Size = System::Drawing::Size(1778, 871);
+			this->chart_StockChart->Size = System::Drawing::Size(1185, 566);
 			this->chart_StockChart->TabIndex = 5;
 			this->chart_StockChart->Text = L"chart1";
 			// 
 			// label_StartDate
 			// 
 			this->label_StartDate->AutoSize = true;
-			this->label_StartDate->Location = System::Drawing::Point(1497, 52);
+			this->label_StartDate->Location = System::Drawing::Point(998, 34);
+			this->label_StartDate->Margin = System::Windows::Forms::Padding(2, 0, 2, 0);
 			this->label_StartDate->Name = L"label_StartDate";
-			this->label_StartDate->Size = System::Drawing::Size(83, 20);
+			this->label_StartDate->Size = System::Drawing::Size(55, 13);
 			this->label_StartDate->TabIndex = 6;
 			this->label_StartDate->Text = L"Start Date";
 			// 
 			// label_EndDate
 			// 
 			this->label_EndDate->AutoSize = true;
-			this->label_EndDate->Location = System::Drawing::Point(1497, 130);
+			this->label_EndDate->Location = System::Drawing::Point(998, 84);
+			this->label_EndDate->Margin = System::Windows::Forms::Padding(2, 0, 2, 0);
 			this->label_EndDate->Name = L"label_EndDate";
-			this->label_EndDate->Size = System::Drawing::Size(77, 20);
+			this->label_EndDate->Size = System::Drawing::Size(52, 13);
 			this->label_EndDate->TabIndex = 7;
 			this->label_EndDate->Text = L"End Date";
 			// 
 			// Form_StockPicker
 			// 
-			this->AutoScaleDimensions = System::Drawing::SizeF(9, 20);
+			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
-			this->ClientSize = System::Drawing::Size(1877, 1302);
+			this->ClientSize = System::Drawing::Size(1251, 846);
 			this->Controls->Add(this->label_EndDate);
 			this->Controls->Add(this->label_StartDate);
 			this->Controls->Add(this->chart_StockChart);
@@ -202,7 +198,6 @@ namespace Stonks {
 			this->Controls->Add(this->dateTimePicker_DateEnd);
 			this->Controls->Add(this->dataGridView_StockGrid);
 			this->Controls->Add(this->button_LoadStock);
-			this->Margin = System::Windows::Forms::Padding(4, 5, 4, 5);
 			this->Name = L"Form_StockPicker";
 			this->Text = L"Stonks";
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dataGridView_StockGrid))->EndInit();
