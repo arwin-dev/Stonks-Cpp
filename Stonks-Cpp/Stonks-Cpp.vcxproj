@@ -128,17 +128,24 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="candlestick.cpp" />
-    <ClCompile Include="Form_Stock.cpp" />
+    <ClCompile Include="Form_Init.cpp" />
+    <ClCompile Include="Form_StockView.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="candlestick.h" />
-    <ClInclude Include="Form_Stock.h">
+    <ClInclude Include="Form_Init.h">
+      <FileType>CppForm</FileType>
+    </ClInclude>
+    <ClInclude Include="Form_StockView.h">
       <FileType>CppForm</FileType>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Form_Stock.resx">
-      <DependentUpon>Form_Stock.h</DependentUpon>
+    <EmbeddedResource Include="Form_Init.resx">
+      <DependentUpon>Form_Init.h</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Form_StockView.resx">
+      <DependentUpon>Form_StockView.h</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

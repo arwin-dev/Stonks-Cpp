@@ -1,6 +1,6 @@
 #pragma once
 
-namespace Stonks {
+namespace Stonks_Cpp {
     using namespace System;
 
     // Declaration of the candlestick class.

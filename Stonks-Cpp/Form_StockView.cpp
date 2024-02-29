@@ -1,24 +1,28 @@
-#include "Form_Stock.h"
+#include "Form_StockView.h"
+
 #include "candlestick.h"
-using namespace Stonks;
+using namespace Stonks_Cpp;
 
 using namespace System;
 using namespace System::Windows::Forms;
 
-[STAThreadAttribute]
 
-void main(array<String^>^ args) {
-    Application::EnableVisualStyles();
-    Application::SetCompatibleTextRenderingDefault(false);
-    Stonks::Form_StockPicker form;
-    Application::Run(% form);
+Form_StockView::Form_StockView(String^ filename, DateTime startDate, DateTime endDate)
+{
+    InitializeComponent();
+    this->Text = filename;
+    dateTimePicker_DateBegin->Value = startDate;
+    dateTimePicker_DateEnd->Value = endDate;
+    allCandlesticks = getStockDataFromFilename(filename);
+    filterCandlesticksByDate();
+    updateDisplay();
 }
 
 /// <summary>
 /// Sets the text of the form to the filename selected through the openFileDialog_LoadStock dialog,
 /// then retrieves stock data from the selected file and assigns it to the allCandlesticks global variable.
 /// </summary>
-void Form_StockPicker::getStockDataFromFilename()
+void Form_StockView::getStockDataFromFilename()
 {
     // Set the form's text to the selected filename
     this->Text = openFileDialog_LoadStock->FileName;
@@ -29,8 +33,9 @@ void Form_StockPicker::getStockDataFromFilename()
 /// <summary>
 /// Filters allcandlesticks based on dateTimePicker_DateBegin and dateTimePicker_DateEnd
 /// </summary>
-void Form_StockPicker::filterCandlesticksByDate()
-{
+void Form_StockView::filterCandlesticksByDate()
+{   
+    bindingCandlesticks->Clear();
     // Assigns the filtered Candlesticks to the bindingCandlesticks global variable
     bindingCandlesticks = filterCandlesticksByDate(allCandlesticks, dateTimePicker_DateBegin->Value, dateTimePicker_DateEnd->Value);
 }
@@ -38,41 +43,18 @@ void Form_StockPicker::filterCandlesticksByDate()
 /// <summary>
 /// Updates the display by binding the candlestick data to the dataGridView_StockGrid and chart_StockChart.
 /// </summary>
-void Form_StockPicker::updateDisplay()
+void Form_StockView::updateDisplay()
 {
-    // Bind the candlestick data to the stock grid view
-    dataGridView_StockGrid->DataSource = bindingCandlesticks;
     // Bind the candlestick data to the stock chart
     chart_StockChart->DataSource = bindingCandlesticks;
     chart_StockChart->DataBind();
 }
 
 /// <summary>
-/// Event handler for the button_LoadStock click event. Shows the openFileDialog_LoadStock dialog.
-/// </summary>
-System::Void Form_StockPicker::button_LoadStock_Click(System::Object^ sender, System::EventArgs^ e)
-{
-    // Show the open file dialog
-    openFileDialog_LoadStock->ShowDialog();
-}
-
-/// <summary>
-/// Event handler for the openFileDialog_LoadStock FileOk event. 
-/// Calls getStockDataFromFilename, filterCandlesticksByDate, and updateDisplay to load, filter, and display stock data.
-/// </summary>
-System::Void Form_StockPicker::openFileDialog_LoadStock_FileOk(System::Object^ sender, System::ComponentModel::CancelEventArgs^ e)
-{
-    // Load stock data from the selected file, filter it, and update the display
-    getStockDataFromFilename();
-    filterCandlesticksByDate();
-    updateDisplay();
-}
-
-/// <summary>
 /// Event handler for the button_Refresh click event. 
 /// Calls filterCandlesticksByDate and updateDisplay to update the displayed data.
 /// </summary>
-System::Void Form_StockPicker::button_Refresh_Click(System::Object^ sender, System::EventArgs^ e)
+System::Void Form_StockView::button_Refresh_Click(System::Object^ sender, System::EventArgs^ e)
 {
     // Filter candlesticks by date and update the display
     filterCandlesticksByDate();
@@ -86,7 +68,7 @@ System::Void Form_StockPicker::button_Refresh_Click(System::Object^ sender, Syst
 /// <param name="startDate">Fitler Start Date</param>
 /// <param name="endDate">Filter End Date</param>
 /// <returns>filteredCandlesticks - filtered Candlesticks</returns>
-BindingList<candlestick^>^ Form_StockPicker::filterCandlesticksByDate(List<candlestick^>^ allCandlesticks, DateTime startDate, DateTime endDate)
+BindingList<candlestick^>^ Form_StockView::filterCandlesticksByDate(List<candlestick^>^ allCandlesticks, DateTime startDate, DateTime endDate)
 {
     // Create a new list to hold filtered candlesticks
     BindingList<candlestick^>^ filteredCandlesticks = gcnew BindingList<candlestick^>();
@@ -117,7 +99,7 @@ BindingList<candlestick^>^ Form_StockPicker::filterCandlesticksByDate(List<candl
 /// </summary>
 /// <param name="filename">filename of the file to extract stock data</param>
 /// <returns>listOfCandlesticks - list of all candlesticks</returns>
-List<candlestick^>^ Form_StockPicker::getStockDataFromFilename(String^ filename)
+List<candlestick^>^ Form_StockView::getStockDataFromFilename(String^ filename)
 {
     // Create a new list to hold candlesticks
     List<candlestick^>^ listOfCandlesticks = gcnew List<candlestick^>(1024);

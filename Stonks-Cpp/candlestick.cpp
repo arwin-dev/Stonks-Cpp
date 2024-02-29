@@ -1,6 +1,6 @@
 #include "candlestick.h"
 
-namespace Stonks {
+namespace Stonks_Cpp {
     // Implementation of the constructor for the candlestick class.
     candlestick::candlestick(String^ line)
     {
