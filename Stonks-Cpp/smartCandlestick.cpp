@@ -1,0 +1,1 @@
+#include "smartCandlestick.h"

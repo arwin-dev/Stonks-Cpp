@@ -15,18 +15,30 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Form_Stock.cpp">
+    <ClCompile Include="candlestick.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="candlestick.cpp">
+    <ClCompile Include="Form_Init.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Form_StockView.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="smartCandlestick.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Form_Stock.h">
+    <ClInclude Include="candlestick.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="candlestick.h">
+    <ClInclude Include="Form_Init.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Form_StockView.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="smartCandlestick.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

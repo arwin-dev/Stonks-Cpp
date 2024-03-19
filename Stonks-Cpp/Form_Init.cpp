@@ -6,14 +6,6 @@ using namespace Stonks_Cpp;
 using namespace System;
 using namespace System::Windows::Forms;
 
-[STAThreadAttribute]
-
-void main(array<String^>^ args) {
-    Application::EnableVisualStyles();
-    Application::SetCompatibleTextRenderingDefault(false);
-    Stonks_Cpp::Form_Init form;
-    Application::Run(% form);
-}
 
 /// <summary>
 /// Event handler for the button_LoadStock click event. Shows the openFileDialog_LoadStock dialog.

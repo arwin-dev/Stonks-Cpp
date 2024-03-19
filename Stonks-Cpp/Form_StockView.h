@@ -47,6 +47,7 @@ namespace Stonks_Cpp {
 	private: System::Windows::Forms::Button^ button_Refresh;
 	private: System::Windows::Forms::DateTimePicker^ dateTimePicker_DateBegin;
 	private: System::Windows::Forms::DateTimePicker^ dateTimePicker_DateEnd;
+	private: System::Windows::Forms::Button^ button_LoadStock;
 	private: System::ComponentModel::IContainer^ components;
 
 	private:
@@ -63,10 +64,10 @@ namespace Stonks_Cpp {
 		void InitializeComponent(void)
 		{
 			this->components = (gcnew System::ComponentModel::Container());
-			System::Windows::Forms::DataVisualization::Charting::ChartArea^ chartArea3 = (gcnew System::Windows::Forms::DataVisualization::Charting::ChartArea());
-			System::Windows::Forms::DataVisualization::Charting::ChartArea^ chartArea4 = (gcnew System::Windows::Forms::DataVisualization::Charting::ChartArea());
-			System::Windows::Forms::DataVisualization::Charting::Series^ series3 = (gcnew System::Windows::Forms::DataVisualization::Charting::Series());
-			System::Windows::Forms::DataVisualization::Charting::Series^ series4 = (gcnew System::Windows::Forms::DataVisualization::Charting::Series());
+			System::Windows::Forms::DataVisualization::Charting::ChartArea^ chartArea1 = (gcnew System::Windows::Forms::DataVisualization::Charting::ChartArea());
+			System::Windows::Forms::DataVisualization::Charting::ChartArea^ chartArea2 = (gcnew System::Windows::Forms::DataVisualization::Charting::ChartArea());
+			System::Windows::Forms::DataVisualization::Charting::Series^ series1 = (gcnew System::Windows::Forms::DataVisualization::Charting::Series());
+			System::Windows::Forms::DataVisualization::Charting::Series^ series2 = (gcnew System::Windows::Forms::DataVisualization::Charting::Series());
 			this->openFileDialog_LoadStock = (gcnew System::Windows::Forms::OpenFileDialog());
 			this->bindingSource_CandlestickList = (gcnew System::Windows::Forms::BindingSource(this->components));
 			this->label_EndDate = (gcnew System::Windows::Forms::Label());
@@ -75,9 +76,15 @@ namespace Stonks_Cpp {
 			this->button_Refresh = (gcnew System::Windows::Forms::Button());
 			this->dateTimePicker_DateBegin = (gcnew System::Windows::Forms::DateTimePicker());
 			this->dateTimePicker_DateEnd = (gcnew System::Windows::Forms::DateTimePicker());
+			this->button_LoadStock = (gcnew System::Windows::Forms::Button());
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->bindingSource_CandlestickList))->BeginInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->chart_StockChart))->BeginInit();
 			this->SuspendLayout();
+			// 
+			// openFileDialog_LoadStock
+			// 
+			this->openFileDialog_LoadStock->Multiselect = true;
+			this->openFileDialog_LoadStock->FileOk += gcnew System::ComponentModel::CancelEventHandler(this, &Form_StockView::openFileDialog_LoadStock_FileOk);
 			// 
 			// label_EndDate
 			// 
@@ -100,31 +107,33 @@ namespace Stonks_Cpp {
 			// chart_StockChart
 			// 
 			this->chart_StockChart->BorderSkin->BackColor = System::Drawing::Color::WhiteSmoke;
-			chartArea3->AlignWithChartArea = L"Chart_Volume";
-			chartArea3->Name = L"Chart_OHLC";
-			chartArea4->Name = L"Chart_Volume";
-			this->chart_StockChart->ChartAreas->Add(chartArea3);
-			this->chart_StockChart->ChartAreas->Add(chartArea4);
+			chartArea1->AlignWithChartArea = L"Chart_Volume";
+			chartArea1->Name = L"Chart_OHLC";
+			chartArea2->Name = L"Chart_Volume";
+			this->chart_StockChart->ChartAreas->Add(chartArea1);
+			this->chart_StockChart->ChartAreas->Add(chartArea2);
 			this->chart_StockChart->DataSource = this->bindingSource_CandlestickList;
 			this->chart_StockChart->Location = System::Drawing::Point(13, 148);
 			this->chart_StockChart->Margin = System::Windows::Forms::Padding(2);
 			this->chart_StockChart->Name = L"chart_StockChart";
-			series3->ChartArea = L"Chart_OHLC";
-			series3->ChartType = System::Windows::Forms::DataVisualization::Charting::SeriesChartType::Candlestick;
-			series3->CustomProperties = L"PriceDownColor=Red, PriceUpColor=Lime";
-			series3->Name = L"Series1";
-			series3->XValueMember = L"Date";
-			series3->XValueType = System::Windows::Forms::DataVisualization::Charting::ChartValueType::Date;
-			series3->YValueMembers = L"High, Low, Open, Close";
-			series3->YValuesPerPoint = 4;
-			series3->YValueType = System::Windows::Forms::DataVisualization::Charting::ChartValueType::Double;
-			series4->ChartArea = L"Chart_Volume";
-			series4->Name = L"Series2";
-			series4->XValueMember = L"Date";
-			series4->XValueType = System::Windows::Forms::DataVisualization::Charting::ChartValueType::Date;
-			series4->YValueMembers = L"Volume";
-			this->chart_StockChart->Series->Add(series3);
-			this->chart_StockChart->Series->Add(series4);
+			series1->ChartArea = L"Chart_OHLC";
+			series1->ChartType = System::Windows::Forms::DataVisualization::Charting::SeriesChartType::Candlestick;
+			series1->CustomProperties = L"PriceDownColor=Red, PriceUpColor=Lime";
+			series1->IsXValueIndexed = true;
+			series1->Name = L"Series1";
+			series1->XValueMember = L"Date";
+			series1->XValueType = System::Windows::Forms::DataVisualization::Charting::ChartValueType::Date;
+			series1->YValueMembers = L"High, Low, Open, Close";
+			series1->YValuesPerPoint = 4;
+			series1->YValueType = System::Windows::Forms::DataVisualization::Charting::ChartValueType::Double;
+			series2->ChartArea = L"Chart_Volume";
+			series2->IsXValueIndexed = true;
+			series2->Name = L"Series2";
+			series2->XValueMember = L"Date";
+			series2->XValueType = System::Windows::Forms::DataVisualization::Charting::ChartValueType::Date;
+			series2->YValueMembers = L"Volume";
+			this->chart_StockChart->Series->Add(series1);
+			this->chart_StockChart->Series->Add(series2);
 			this->chart_StockChart->Size = System::Drawing::Size(1737, 871);
 			this->chart_StockChart->TabIndex = 12;
 			this->chart_StockChart->Text = L"chart1";
@@ -157,11 +166,23 @@ namespace Stonks_Cpp {
 			this->dateTimePicker_DateEnd->Size = System::Drawing::Size(298, 26);
 			this->dateTimePicker_DateEnd->TabIndex = 9;
 			// 
+			// button_LoadStock
+			// 
+			this->button_LoadStock->Location = System::Drawing::Point(1450, 68);
+			this->button_LoadStock->Margin = System::Windows::Forms::Padding(4, 5, 4, 5);
+			this->button_LoadStock->Name = L"button_LoadStock";
+			this->button_LoadStock->Size = System::Drawing::Size(300, 58);
+			this->button_LoadStock->TabIndex = 15;
+			this->button_LoadStock->Text = L"LOAD";
+			this->button_LoadStock->UseVisualStyleBackColor = true;
+			this->button_LoadStock->Click += gcnew System::EventHandler(this, &Form_StockView::button_LoadStock_Click);
+			// 
 			// Form_StockView
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(9, 20);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->ClientSize = System::Drawing::Size(1829, 1047);
+			this->Controls->Add(this->button_LoadStock);
 			this->Controls->Add(this->label_EndDate);
 			this->Controls->Add(this->label_StartDate);
 			this->Controls->Add(this->chart_StockChart);
@@ -206,5 +227,13 @@ namespace Stonks_Cpp {
 		// Event handler for the button_Refresh click event. 
 		// Calls filterCandlesticksByDate and updateDisplay to update the displayed data.
 		private: System::Void button_Refresh_Click(System::Object^ sender, System::EventArgs^ e);
-	};
+
+
+		private: System::Void button_LoadStock_Click(System::Object^ sender, System::EventArgs^ e);
+
+
+		private: System::Void openFileDialog_LoadStock_FileOk(System::Object^ sender, System::ComponentModel::CancelEventArgs^ e);
+
+		private: System::Void InitializeParent(String^ filename);
+};
 }

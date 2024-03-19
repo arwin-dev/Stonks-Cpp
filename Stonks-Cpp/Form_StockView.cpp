@@ -6,11 +6,49 @@ using namespace Stonks_Cpp;
 using namespace System;
 using namespace System::Windows::Forms;
 
+[STAThreadAttribute]
+
+void main(array<String^>^ args) {
+    Application::EnableVisualStyles();
+    Application::SetCompatibleTextRenderingDefault(false);
+    Stonks_Cpp::Form_StockView form;
+    Application::Run(% form);
+}
+
+
+void Form_StockView::button_LoadStock_Click(System::Object^ sender, System::EventArgs^ e)
+{
+    openFileDialog_LoadStock->ShowDialog();
+}
+
+void Form_StockView::openFileDialog_LoadStock_FileOk(System::Object^ sender, System::ComponentModel::CancelEventArgs^ e)
+{
+    for each (String ^ filename in openFileDialog_LoadStock->FileNames)
+    {
+        if (allCandlesticks ==  nullptr)
+        {
+            InitializeParent(filename);
+        }
+        else
+        {
+            Stonks_Cpp::Form_StockView^ stockViewForm = gcnew Stonks_Cpp::Form_StockView(filename, dateTimePicker_DateBegin->Value, dateTimePicker_DateEnd->Value);
+            stockViewForm->Show();
+        }
+    }
+}
+
+void Form_StockView::InitializeParent(String^ filename)
+{
+    this->Text = filename + " (Parent)";
+    allCandlesticks = getStockDataFromFilename(filename);
+    filterCandlesticksByDate();
+    updateDisplay();
+}
 
 Form_StockView::Form_StockView(String^ filename, DateTime startDate, DateTime endDate)
 {
     InitializeComponent();
-    this->Text = filename;
+    this->Text = filename + " (Child)";
     dateTimePicker_DateBegin->Value = startDate;
     dateTimePicker_DateEnd->Value = endDate;
     allCandlesticks = getStockDataFromFilename(filename);
