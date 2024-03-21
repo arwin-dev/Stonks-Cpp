@@ -106,10 +106,10 @@ System::Void Form_StockView::button_Refresh_Click(System::Object^ sender, System
 /// <param name="startDate">Fitler Start Date</param>
 /// <param name="endDate">Filter End Date</param>
 /// <returns>filteredCandlesticks - filtered Candlesticks</returns>
-BindingList<candlestick^>^ Form_StockView::filterCandlesticksByDate(List<candlestick^>^ allCandlesticks, DateTime startDate, DateTime endDate)
+BindingList<smartCandlestick^>^ Form_StockView::filterCandlesticksByDate(List<smartCandlestick^>^ allCandlesticks, DateTime startDate, DateTime endDate)
 {
     // Create a new list to hold filtered candlesticks
-    BindingList<candlestick^>^ filteredCandlesticks = gcnew BindingList<candlestick^>();
+    BindingList<smartCandlestick^>^ filteredCandlesticks = gcnew BindingList<smartCandlestick^>();
 
     // Check if there are candlesticks and the count is greater than 0
     if (allCandlesticks != nullptr && allCandlesticks->Count > 0) {
@@ -117,7 +117,7 @@ BindingList<candlestick^>^ Form_StockView::filterCandlesticksByDate(List<candles
         bindingCandlesticks->Clear();
 
         // Loop through all candlesticks
-        for each (candlestick ^ cs in allCandlesticks)
+        for each (smartCandlestick ^ cs in allCandlesticks)
         {
             // If the candlestick date is beyond the end date, break the loop
             if (cs->Date > dateTimePicker_DateEnd->Value) break;
@@ -137,10 +137,10 @@ BindingList<candlestick^>^ Form_StockView::filterCandlesticksByDate(List<candles
 /// </summary>
 /// <param name="filename">filename of the file to extract stock data</param>
 /// <returns>listOfCandlesticks - list of all candlesticks</returns>
-List<candlestick^>^ Form_StockView::getStockDataFromFilename(String^ filename)
+List<smartCandlestick^>^ Form_StockView::getStockDataFromFilename(String^ filename)
 {
     // Create a new list to hold candlesticks
-    List<candlestick^>^ listOfCandlesticks = gcnew List<candlestick^>(1024);
+    List<smartCandlestick^>^ listOfCandlesticks = gcnew List<smartCandlestick^>(1024);
     // Open the file for reading
     StreamReader^ sr = gcnew StreamReader(filename);
 
@@ -152,7 +152,7 @@ List<candlestick^>^ Form_StockView::getStockDataFromFilename(String^ filename)
     while ((line = sr->ReadLine()) != nullptr)
     {
         // Create a new candlestick object and add it to the list
-        listOfCandlesticks->Add(gcnew candlestick(line));
+        listOfCandlesticks->Add(gcnew smartCandlestick(line));
     }
 
     return listOfCandlesticks;

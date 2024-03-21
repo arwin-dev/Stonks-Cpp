@@ -1,5 +1,5 @@
 #pragma once
-#include "candlestick.h"
+#include "smartCandlestick.h"
 
 namespace Stonks_Cpp {
 
@@ -202,18 +202,18 @@ namespace Stonks_Cpp {
 
 		// List of candlesticks containing all the data read from the file.
 		// This list is populated when loading stock data from a file.
-		List<candlestick^>^ allCandlesticks;
+		List<smartCandlestick^>^ allCandlesticks;
 
 		// Binding list of candlesticks used for data binding with UI controls.
-		BindingList<candlestick^>^ bindingCandlesticks = gcnew BindingList<candlestick^>();
+		BindingList<smartCandlestick^>^ bindingCandlesticks = gcnew BindingList<smartCandlestick^>();
 
 		public: Form_StockView(String^ filename, DateTime startDate, DateTime endDate);
 
 		// Reads stock data from the specified file and returns it as a list of candlesticks.
-		private: List<candlestick^>^ getStockDataFromFilename(String^ filename);
+		private: List<smartCandlestick^>^ getStockDataFromFilename(String^ filename);
 
 		// Filters the candlesticks data based on the specified date range.
-		private: BindingList<candlestick^>^ filterCandlesticksByDate(List<candlestick^>^ allCandlesticks, DateTime startDate, DateTime endDate);
+		private: BindingList<smartCandlestick^>^ filterCandlesticksByDate(List<smartCandlestick^>^ allCandlesticks, DateTime startDate, DateTime endDate);
 
 		// Extracts stock data from the selected file and updates the form's title with the file name.
 		private: void getStockDataFromFilename();
