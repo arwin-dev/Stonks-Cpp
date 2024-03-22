@@ -4,6 +4,7 @@
 using namespace Stonks_Cpp;
 
 using namespace System;
+using namespace System::Drawing;
 using namespace System::Windows::Forms;
 
 [STAThreadAttribute]
@@ -23,9 +24,11 @@ void Form_StockView::button_LoadStock_Click(System::Object^ sender, System::Even
 
 void Form_StockView::openFileDialog_LoadStock_FileOk(System::Object^ sender, System::ComponentModel::CancelEventArgs^ e)
 {
-    for each (String ^ filename in openFileDialog_LoadStock->FileNames)
+    int fileCount = openFileDialog_LoadStock->FileNames->Length;
+    for (int i = 0; i < fileCount ; i++)
     {
-        if (allCandlesticks ==  nullptr)
+        String^ filename = openFileDialog_LoadStock->FileNames[i];
+        if (i == 0)
         {
             InitializeParent(filename);
         }
@@ -42,6 +45,7 @@ void Form_StockView::InitializeParent(String^ filename)
     this->Text = filename + " (Parent)";
     allCandlesticks = getStockDataFromFilename(filename);
     filterCandlesticksByDate();
+    InitializePatternComboBox();
     updateDisplay();
 }
 
@@ -53,8 +57,75 @@ Form_StockView::Form_StockView(String^ filename, DateTime startDate, DateTime en
     dateTimePicker_DateEnd->Value = endDate;
     allCandlesticks = getStockDataFromFilename(filename);
     filterCandlesticksByDate();
+    InitializePatternComboBox();
     updateDisplay();
 }
+
+void Form_StockView::InitializePatternComboBox()
+{
+    comboBox_patterns->Items->Clear();
+
+    if (patternTracker->Count == 0)
+        return;
+
+    for each (KeyValuePair<String^, List<smartCandlestick^>^> ^ pattern in patternTracker)
+    {
+        if (pattern->Value->Count > 0)
+        {
+            comboBox_patterns->Items->Add(pattern->Key);
+        }
+    }
+
+}
+
+System::Void Form_StockView::comboBox_patterns_SelectedIndexChanged(System::Object^ sender, System::EventArgs^ e)
+{
+    chart_StockChart->Annotations->Clear();
+    String^ selectedPattern = comboBox_patterns->SelectedItem->ToString();
+
+    List<smartCandlestick^>^ pattern = nullptr;
+    if (patternTracker->TryGetValue(selectedPattern, pattern))
+    {
+        for each (smartCandlestick ^ candlestick in pattern)
+        {
+            CreateAnnotation(candlestick);
+        }
+    }
+
+    chart_StockChart->Refresh();
+}
+
+void Form_StockView::CreateAnnotation(smartCandlestick^ cs)
+{
+    int index = 0;
+    for (int i = 0; i < bindingCandlesticks->Count; i++)
+    {
+        if (cs == bindingCandlesticks[i])
+        {
+            index = i;
+            break;
+        }
+    }
+
+    // Create a text annotation
+    System::Windows::Forms::DataVisualization::Charting::ArrowAnnotation^ arrowAnnotation = gcnew System::Windows::Forms::DataVisualization::Charting::ArrowAnnotation();
+    arrowAnnotation->AxisX = chart_StockChart->ChartAreas[0]->AxisX;
+    arrowAnnotation->AxisY = chart_StockChart->ChartAreas[0]->AxisY;
+    arrowAnnotation->X = cs->Date.ToOADate();
+
+    arrowAnnotation->Y = (double)(cs->Low) - 5;
+    arrowAnnotation->LineWidth = 1;
+    arrowAnnotation->Width = 0;
+    arrowAnnotation->Height = 5;
+    arrowAnnotation->ArrowSize = 2;
+    arrowAnnotation->ForeColor = Color::Black;
+    arrowAnnotation->LineColor = Color::Red;
+    arrowAnnotation->BackColor = Color::Black;
+    arrowAnnotation->SetAnchor(chart_StockChart->Series["Series_OHLC"]->Points[index]);
+    chart_StockChart->Annotations->Add(arrowAnnotation);
+}
+
+
 
 /// <summary>
 /// Sets the text of the form to the filename selected through the openFileDialog_LoadStock dialog,
@@ -86,6 +157,7 @@ void Form_StockView::updateDisplay()
     // Bind the candlestick data to the stock chart
     chart_StockChart->DataSource = bindingCandlesticks;
     chart_StockChart->DataBind();
+    
 }
 
 /// <summary>
@@ -96,6 +168,7 @@ System::Void Form_StockView::button_Refresh_Click(System::Object^ sender, System
 {
     // Filter candlesticks by date and update the display
     filterCandlesticksByDate();
+    InitializePatternComboBox();
     updateDisplay();
 }
 
@@ -116,6 +189,9 @@ BindingList<smartCandlestick^>^ Form_StockView::filterCandlesticksByDate(List<sm
         // Clear the previous binding candlesticks
         bindingCandlesticks->Clear();
 
+        double max = Double::MinValue;
+        double min = Double::MaxValue;
+
         // Loop through all candlesticks
         for each (smartCandlestick ^ cs in allCandlesticks)
         {
@@ -125,9 +201,39 @@ BindingList<smartCandlestick^>^ Form_StockView::filterCandlesticksByDate(List<sm
             // If the candlestick date is within the specified range, add it to the filtered list
             if (cs->Date >= dateTimePicker_DateBegin->Value)
             {
+                if (cs->Low < min)
+                {
+                    min = cs->Low;
+                }
+
+                if (cs->High > max)
+                {
+                    max = cs->High;
+                }
+
+                for each (KeyValuePair<String^, bool> ^ pattern in cs->Patterns)
+                {
+                    if (pattern->Value == false) continue;
+
+                    if (patternTracker->ContainsKey(pattern->Key))
+                    {
+                        patternTracker[pattern->Key]->Add(cs);
+                    }
+                    else
+                    {
+                        List<smartCandlestick^>^ newList = gcnew List<smartCandlestick^>();
+                        newList->Add(cs);
+                        patternTracker->Add(pattern->Key, newList);
+                    }
+                }
+
                 filteredCandlesticks->Add(cs);
             }
         }
+
+        chart_StockChart->ChartAreas["Chart_OHLC"]->AxisY->Minimum = Math::Round(min * 0.9, 2);
+        chart_StockChart->ChartAreas["Chart_OHLC"]->AxisY->Maximum = Math::Round(max * 1.1, 2);
+
     }
     return filteredCandlesticks;
 }

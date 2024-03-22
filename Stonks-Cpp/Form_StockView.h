@@ -48,6 +48,7 @@ namespace Stonks_Cpp {
 	private: System::Windows::Forms::DateTimePicker^ dateTimePicker_DateBegin;
 	private: System::Windows::Forms::DateTimePicker^ dateTimePicker_DateEnd;
 	private: System::Windows::Forms::Button^ button_LoadStock;
+	private: System::Windows::Forms::ComboBox^ comboBox_patterns;
 	private: System::ComponentModel::IContainer^ components;
 
 	private:
@@ -77,6 +78,7 @@ namespace Stonks_Cpp {
 			this->dateTimePicker_DateBegin = (gcnew System::Windows::Forms::DateTimePicker());
 			this->dateTimePicker_DateEnd = (gcnew System::Windows::Forms::DateTimePicker());
 			this->button_LoadStock = (gcnew System::Windows::Forms::Button());
+			this->comboBox_patterns = (gcnew System::Windows::Forms::ComboBox());
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->bindingSource_CandlestickList))->BeginInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->chart_StockChart))->BeginInit();
 			this->SuspendLayout();
@@ -89,18 +91,20 @@ namespace Stonks_Cpp {
 			// label_EndDate
 			// 
 			this->label_EndDate->AutoSize = true;
-			this->label_EndDate->Location = System::Drawing::Point(56, 100);
+			this->label_EndDate->Location = System::Drawing::Point(37, 65);
+			this->label_EndDate->Margin = System::Windows::Forms::Padding(2, 0, 2, 0);
 			this->label_EndDate->Name = L"label_EndDate";
-			this->label_EndDate->Size = System::Drawing::Size(77, 20);
+			this->label_EndDate->Size = System::Drawing::Size(52, 13);
 			this->label_EndDate->TabIndex = 14;
 			this->label_EndDate->Text = L"End Date";
 			// 
 			// label_StartDate
 			// 
 			this->label_StartDate->AutoSize = true;
-			this->label_StartDate->Location = System::Drawing::Point(50, 59);
+			this->label_StartDate->Location = System::Drawing::Point(33, 38);
+			this->label_StartDate->Margin = System::Windows::Forms::Padding(2, 0, 2, 0);
 			this->label_StartDate->Name = L"label_StartDate";
-			this->label_StartDate->Size = System::Drawing::Size(83, 20);
+			this->label_StartDate->Size = System::Drawing::Size(55, 13);
 			this->label_StartDate->TabIndex = 13;
 			this->label_StartDate->Text = L"Start Date";
 			// 
@@ -113,14 +117,14 @@ namespace Stonks_Cpp {
 			this->chart_StockChart->ChartAreas->Add(chartArea1);
 			this->chart_StockChart->ChartAreas->Add(chartArea2);
 			this->chart_StockChart->DataSource = this->bindingSource_CandlestickList;
-			this->chart_StockChart->Location = System::Drawing::Point(13, 148);
-			this->chart_StockChart->Margin = System::Windows::Forms::Padding(2);
+			this->chart_StockChart->Location = System::Drawing::Point(9, 96);
+			this->chart_StockChart->Margin = System::Windows::Forms::Padding(1);
 			this->chart_StockChart->Name = L"chart_StockChart";
 			series1->ChartArea = L"Chart_OHLC";
 			series1->ChartType = System::Windows::Forms::DataVisualization::Charting::SeriesChartType::Candlestick;
 			series1->CustomProperties = L"PriceDownColor=Red, PriceUpColor=Lime";
 			series1->IsXValueIndexed = true;
-			series1->Name = L"Series1";
+			series1->Name = L"Series_OHLC";
 			series1->XValueMember = L"Date";
 			series1->XValueType = System::Windows::Forms::DataVisualization::Charting::ChartValueType::Date;
 			series1->YValueMembers = L"High, Low, Open, Close";
@@ -128,22 +132,21 @@ namespace Stonks_Cpp {
 			series1->YValueType = System::Windows::Forms::DataVisualization::Charting::ChartValueType::Double;
 			series2->ChartArea = L"Chart_Volume";
 			series2->IsXValueIndexed = true;
-			series2->Name = L"Series2";
+			series2->Name = L"Series_Volume";
 			series2->XValueMember = L"Date";
 			series2->XValueType = System::Windows::Forms::DataVisualization::Charting::ChartValueType::Date;
 			series2->YValueMembers = L"Volume";
 			this->chart_StockChart->Series->Add(series1);
 			this->chart_StockChart->Series->Add(series2);
-			this->chart_StockChart->Size = System::Drawing::Size(1737, 871);
+			this->chart_StockChart->Size = System::Drawing::Size(1158, 566);
 			this->chart_StockChart->TabIndex = 12;
 			this->chart_StockChart->Text = L"chart1";
 			// 
 			// button_Refresh
 			// 
-			this->button_Refresh->Location = System::Drawing::Point(468, 59);
-			this->button_Refresh->Margin = System::Windows::Forms::Padding(4, 5, 4, 5);
+			this->button_Refresh->Location = System::Drawing::Point(312, 38);
 			this->button_Refresh->Name = L"button_Refresh";
-			this->button_Refresh->Size = System::Drawing::Size(131, 67);
+			this->button_Refresh->Size = System::Drawing::Size(87, 44);
 			this->button_Refresh->TabIndex = 11;
 			this->button_Refresh->Text = L"Refresh";
 			this->button_Refresh->UseVisualStyleBackColor = true;
@@ -151,37 +154,44 @@ namespace Stonks_Cpp {
 			// 
 			// dateTimePicker_DateBegin
 			// 
-			this->dateTimePicker_DateBegin->Location = System::Drawing::Point(152, 59);
-			this->dateTimePicker_DateBegin->Margin = System::Windows::Forms::Padding(4, 5, 4, 5);
+			this->dateTimePicker_DateBegin->Location = System::Drawing::Point(101, 38);
 			this->dateTimePicker_DateBegin->Name = L"dateTimePicker_DateBegin";
-			this->dateTimePicker_DateBegin->Size = System::Drawing::Size(298, 26);
+			this->dateTimePicker_DateBegin->Size = System::Drawing::Size(200, 20);
 			this->dateTimePicker_DateBegin->TabIndex = 10;
 			this->dateTimePicker_DateBegin->Value = System::DateTime(2019, 1, 15, 0, 0, 0, 0);
 			// 
 			// dateTimePicker_DateEnd
 			// 
-			this->dateTimePicker_DateEnd->Location = System::Drawing::Point(152, 100);
-			this->dateTimePicker_DateEnd->Margin = System::Windows::Forms::Padding(4, 5, 4, 5);
+			this->dateTimePicker_DateEnd->Location = System::Drawing::Point(101, 65);
 			this->dateTimePicker_DateEnd->Name = L"dateTimePicker_DateEnd";
-			this->dateTimePicker_DateEnd->Size = System::Drawing::Size(298, 26);
+			this->dateTimePicker_DateEnd->Size = System::Drawing::Size(200, 20);
 			this->dateTimePicker_DateEnd->TabIndex = 9;
 			// 
 			// button_LoadStock
 			// 
-			this->button_LoadStock->Location = System::Drawing::Point(1450, 68);
-			this->button_LoadStock->Margin = System::Windows::Forms::Padding(4, 5, 4, 5);
+			this->button_LoadStock->Location = System::Drawing::Point(967, 44);
 			this->button_LoadStock->Name = L"button_LoadStock";
-			this->button_LoadStock->Size = System::Drawing::Size(300, 58);
+			this->button_LoadStock->Size = System::Drawing::Size(200, 38);
 			this->button_LoadStock->TabIndex = 15;
 			this->button_LoadStock->Text = L"LOAD";
 			this->button_LoadStock->UseVisualStyleBackColor = true;
 			this->button_LoadStock->Click += gcnew System::EventHandler(this, &Form_StockView::button_LoadStock_Click);
 			// 
+			// comboBox_patterns
+			// 
+			this->comboBox_patterns->FormattingEnabled = true;
+			this->comboBox_patterns->Location = System::Drawing::Point(464, 41);
+			this->comboBox_patterns->Name = L"comboBox_patterns";
+			this->comboBox_patterns->Size = System::Drawing::Size(121, 21);
+			this->comboBox_patterns->TabIndex = 16;
+			this->comboBox_patterns->SelectedIndexChanged += gcnew System::EventHandler(this, &Form_StockView::comboBox_patterns_SelectedIndexChanged);
+			// 
 			// Form_StockView
 			// 
-			this->AutoScaleDimensions = System::Drawing::SizeF(9, 20);
+			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
-			this->ClientSize = System::Drawing::Size(1829, 1047);
+			this->ClientSize = System::Drawing::Size(1219, 681);
+			this->Controls->Add(this->comboBox_patterns);
 			this->Controls->Add(this->button_LoadStock);
 			this->Controls->Add(this->label_EndDate);
 			this->Controls->Add(this->label_StartDate);
@@ -189,6 +199,7 @@ namespace Stonks_Cpp {
 			this->Controls->Add(this->button_Refresh);
 			this->Controls->Add(this->dateTimePicker_DateBegin);
 			this->Controls->Add(this->dateTimePicker_DateEnd);
+			this->Margin = System::Windows::Forms::Padding(2);
 			this->Name = L"Form_StockView";
 			this->Text = L"Form_StockView";
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->bindingSource_CandlestickList))->EndInit();
@@ -206,6 +217,9 @@ namespace Stonks_Cpp {
 
 		// Binding list of candlesticks used for data binding with UI controls.
 		BindingList<smartCandlestick^>^ bindingCandlesticks = gcnew BindingList<smartCandlestick^>();
+
+		//ad'ljkfhsdogijhsfl;ghnlfk;sgnlsfgnklsfnglksfgl add comments here
+		Dictionary<String^, List<smartCandlestick^>^>^ patternTracker = gcnew Dictionary<String^, List<smartCandlestick^>^>();
 
 		public: Form_StockView(String^ filename, DateTime startDate, DateTime endDate);
 
@@ -228,12 +242,17 @@ namespace Stonks_Cpp {
 		// Calls filterCandlesticksByDate and updateDisplay to update the displayed data.
 		private: System::Void button_Refresh_Click(System::Object^ sender, System::EventArgs^ e);
 
-
 		private: System::Void button_LoadStock_Click(System::Object^ sender, System::EventArgs^ e);
 
 
 		private: System::Void openFileDialog_LoadStock_FileOk(System::Object^ sender, System::ComponentModel::CancelEventArgs^ e);
 
 		private: System::Void InitializeParent(String^ filename);
+
+		private: System::Void InitializePatternComboBox();
+
+		private: System::Void comboBox_patterns_SelectedIndexChanged(System::Object^ sender, System::EventArgs^ e);
+
+		private: System::Void CreateAnnotation(smartCandlestick^ cs);
 };
 }

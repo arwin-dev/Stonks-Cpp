@@ -1,6 +1,10 @@
 #pragma once
 #include "candlestick.h"
 
+using namespace System;
+using namespace System::Collections::Generic;
+using namespace System::Globalization;
+using namespace System::IO;
 
 namespace Stonks_Cpp {
 	using namespace System;
@@ -25,6 +29,8 @@ namespace Stonks_Cpp {
             property bool IsGravestoneDoji;
             property bool IsHammer;
             property bool IsInvertedHammer;
+
+            Dictionary<String^, bool>^ Patterns;
 
             smartCandlestick(String^ line);
 	};

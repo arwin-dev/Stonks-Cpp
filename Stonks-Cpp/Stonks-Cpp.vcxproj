@@ -128,24 +128,17 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="candlestick.cpp" />
-    <ClCompile Include="Form_Init.cpp" />
     <ClCompile Include="Form_StockView.cpp" />
     <ClCompile Include="smartCandlestick.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="candlestick.h" />
-    <ClInclude Include="Form_Init.h">
-      <FileType>CppForm</FileType>
-    </ClInclude>
     <ClInclude Include="Form_StockView.h">
       <FileType>CppForm</FileType>
     </ClInclude>
     <ClInclude Include="smartCandlestick.h" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Form_Init.resx">
-      <DependentUpon>Form_Init.h</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Form_StockView.resx">
       <DependentUpon>Form_StockView.h</DependentUpon>
     </EmbeddedResource>
