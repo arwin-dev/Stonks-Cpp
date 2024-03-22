@@ -6,6 +6,8 @@ using namespace Stonks_Cpp;
 using namespace System;
 using namespace System::Drawing;
 using namespace System::Windows::Forms;
+using namespace System::Windows::Forms::DataVisualization::Charting;
+
 
 [STAThreadAttribute]
 
@@ -107,23 +109,32 @@ void Form_StockView::CreateAnnotation(smartCandlestick^ cs)
         }
     }
 
+    // Calculate padding value (adjust this value as needed)
+    double padding = 10; // Adjust this value to your desired padding
+
     // Create a text annotation
-    System::Windows::Forms::DataVisualization::Charting::ArrowAnnotation^ arrowAnnotation = gcnew System::Windows::Forms::DataVisualization::Charting::ArrowAnnotation();
+    ArrowAnnotation^ arrowAnnotation = gcnew ArrowAnnotation();
     arrowAnnotation->AxisX = chart_StockChart->ChartAreas[0]->AxisX;
     arrowAnnotation->AxisY = chart_StockChart->ChartAreas[0]->AxisY;
     arrowAnnotation->X = cs->Date.ToOADate();
 
-    arrowAnnotation->Y = (double)(cs->Low) - 5;
+    ////// Adjust Y coordinate with padding
+    arrowAnnotation->Y = Convert::ToDouble(cs->Low) ;
+
     arrowAnnotation->LineWidth = 1;
     arrowAnnotation->Width = 0;
     arrowAnnotation->Height = 5;
     arrowAnnotation->ArrowSize = 2;
-    arrowAnnotation->ForeColor = Color::Black;
-    arrowAnnotation->LineColor = Color::Red;
-    arrowAnnotation->BackColor = Color::Black;
+    arrowAnnotation->ForeColor = cs->IsBullish ? Color::Green : Color::Red;
+    arrowAnnotation->LineColor = cs->IsBullish ? Color::Green : Color::Red;
+    arrowAnnotation->BackColor = cs->IsBullish ? Color::Green : Color::Red;
+    arrowAnnotation->AnchorOffsetY = 4;
+    //arrowAnnotation->AnchorY = Convert::ToDouble(cs->Low - 50);
     arrowAnnotation->SetAnchor(chart_StockChart->Series["Series_OHLC"]->Points[index]);
     chart_StockChart->Annotations->Add(arrowAnnotation);
+
 }
+
 
 
 
