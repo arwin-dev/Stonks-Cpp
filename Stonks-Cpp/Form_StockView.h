@@ -254,5 +254,7 @@ namespace Stonks_Cpp {
 		private: System::Void comboBox_patterns_SelectedIndexChanged(System::Object^ sender, System::EventArgs^ e);
 
 		private: System::Void CreateAnnotation(smartCandlestick^ cs);
+
+		private: System::Void normalizeChart();
 };
 }
