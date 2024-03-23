@@ -217,6 +217,7 @@ BindingList<smartCandlestick^>^ Form_StockView::filterCandlesticksByDate(List<sm
     if (allCandlesticks != nullptr && allCandlesticks->Count > 0) {
         // Clear the previous binding candlesticks
         bindingCandlesticks->Clear();
+        patternTracker->Clear();
 
         // Loop through all candlesticks
         for each (smartCandlestick ^ cs in allCandlesticks)
