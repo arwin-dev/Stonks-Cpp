@@ -1,5 +1,6 @@
 #pragma once
 #include "smartCandlestick.h"
+#include "recognizer.h"
 
 namespace Stonks_Cpp {
 
@@ -226,13 +227,14 @@ namespace Stonks_Cpp {
 			// List of candlesticks containing all the data read from the file.
 			// This list is populated when loading stock data from a file.
 			List<smartCandlestick^>^ allCandlesticks;
+			List<smartCandlestick^>^ allCandlestteasdasdasdicks = gcnew List<smartCandlestick^>();
 
 			// Binding list of candlesticks used for data binding with UI controls.
 			BindingList<smartCandlestick^>^ bindingCandlesticks = gcnew BindingList<smartCandlestick^>();
 
 			// Dictionary to track patterns and associated candlesticks.
 			// Key: Pattern name, Value: List of candlesticks matching the pattern.
-			Dictionary<String^, List<smartCandlestick^>^>^ patternTracker = gcnew Dictionary<String^, List<smartCandlestick^>^>();
+			List<recognizer^> recognizerTracker;
 
 		public:
 			// Constructor for Form_StockView.
@@ -280,7 +282,9 @@ namespace Stonks_Cpp {
 			System::Void comboBox_patterns_SelectedIndexChanged(System::Object^ sender, System::EventArgs^ e);
 
 			// Creates an arrow annotation on the chart to highlight a specific candlestick.
-			void CreateAnnotation(smartCandlestick^ cs);
+			void CreateAnnotation(int csIndex, Color color);
+
+			void CreateListOfAnnotations(List<smartCandlestick^>^ cs, String^ patternName);
 
 			// Normalizes the Y-axis range of the chart to ensure all data points are visible with some padding.
 			void normalizeChart();

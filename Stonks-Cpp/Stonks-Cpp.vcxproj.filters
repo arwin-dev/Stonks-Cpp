@@ -18,13 +18,13 @@
     <ClCompile Include="candlestick.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Form_Init.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Form_StockView.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="smartCandlestick.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="recognizer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -32,13 +32,13 @@
     <ClInclude Include="candlestick.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Form_Init.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Form_StockView.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="smartCandlestick.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="recognizer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

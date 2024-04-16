@@ -1,21 +1,24 @@
 #include "Form_StockView.h"
-
 #include "candlestick.h"
+#include "recognizer.h"
+
 using namespace Stonks_Cpp;
 
 using namespace System;
 using namespace System::Drawing;
 using namespace System::Windows::Forms;
 using namespace System::Windows::Forms::DataVisualization::Charting;
+using namespace System::Reflection;
 
 
 [STAThreadAttribute]
 
-void main(array<String^>^ args) {
+int main(array<String^>^ args) {
     Application::EnableVisualStyles();
     Application::SetCompatibleTextRenderingDefault(false);
     Stonks_Cpp::Form_StockView form;
     Application::Run(% form);
+    return 0;
 }
 
 
@@ -149,10 +152,19 @@ void Form_StockView::InitializePatternComboBox()
     // Clear existing items in the combo box
     comboBox_patterns->Items->Clear();
 
-    // Iterate through each pattern in the patternTracker and add it to the combo box
-    for each (KeyValuePair<String^, List<smartCandlestick^>^> ^ pattern in patternTracker)
+    Type^ baseType = recognizer::typeid;
+    array<Type^>^ allTypes = Assembly::GetExecutingAssembly()->GetTypes();
+
+    for each (Type ^ type in allTypes)
     {
-        comboBox_patterns->Items->Add(pattern->Key);
+        if (type->IsSubclassOf(baseType))
+        {
+            recognizer^ recognizerInstance = dynamic_cast<recognizer^>(Activator::CreateInstance(type));
+
+            // Access the patternName property and add it to the ComboBox
+            comboBox_patterns->Items->Add(recognizerInstance->patternName);
+            recognizerTracker.Add(recognizerInstance);
+        }
     }
 }
 
@@ -170,16 +182,33 @@ System::Void Form_StockView::comboBox_patterns_SelectedIndexChanged(System::Obje
 
     // Get the selected pattern from the comboBox_patterns
     String^ selectedPattern = comboBox_patterns->SelectedItem->ToString();
-
+    recognizer^ selected = recognizerTracker[comboBox_patterns->SelectedIndex];
     // Retrieve the list of candlesticks associated with the selected pattern from patternTracker
     List<smartCandlestick^>^ pattern = nullptr;
-    if (patternTracker->TryGetValue(selectedPattern, pattern))
+    //if (patternTracker->TryGetValue(selectedPattern, pattern))
+    //{
+    //    // Iterate through each candlestick in the pattern and create annotations for them
+    //    for each (smartCandlestick ^ candlestick in pattern)
+    //    {
+    //        CreateAnnotation(candlestick);
+    //    }
+    //}
+
+    for (int i = 0; i < bindingCandlesticks->Count; i++)
     {
-        // Iterate through each candlestick in the pattern and create annotations for them
-        for each (smartCandlestick ^ candlestick in pattern)
+        if (selected->recognizePattern(bindingCandlesticks[i]) && selected->patternSize == 1)
         {
-            CreateAnnotation(candlestick);
+            CreateAnnotation(i, Color::Red);
         }
+        else if (i < bindingCandlesticks->Count - selected->patternSize + 1)
+        {
+            List<smartCandlestick^>^ subList = allCandlestteasdasdasdicks->GetRange(i, selected->patternSize);
+            if (selected->recognizePattern(subList))
+            {
+                CreateListOfAnnotations(subList, selected->patternName);
+            }
+        }
+
     }
 
     // Refresh the chart to reflect the changes
@@ -191,22 +220,14 @@ System::Void Form_StockView::comboBox_patterns_SelectedIndexChanged(System::Obje
 /// Creates an arrow annotation on the chart to highlight a specific candlestick.
 /// </summary>
 /// <param name="cs">The smartCandlestick to create the annotation for.</param>
-void Form_StockView::CreateAnnotation(smartCandlestick^ cs)
+void Form_StockView::CreateAnnotation(int csIndex, Color color )
 {
-    // Find the index of the specified candlestick in the bindingCandlesticks list
-    int index = 0;
-    for (int i = 0; i < bindingCandlesticks->Count; i++)
-    {
-        if (cs == bindingCandlesticks[i])
-        {
-            index = i;
-            break;
-        }
-    }
+
+    smartCandlestick^ cs = bindingCandlesticks[csIndex];
 
     // Create a text annotation
     ArrowAnnotation^ arrowAnnotation = gcnew ArrowAnnotation();
-    // Set the axes for the annotation
+    // Set the axes for the annotationdghghfghnfghfghfghfgh
     arrowAnnotation->AxisX = chart_StockChart->ChartAreas[0]->AxisX;
     arrowAnnotation->AxisY = chart_StockChart->ChartAreas[0]->AxisY;
 
@@ -220,9 +241,21 @@ void Form_StockView::CreateAnnotation(smartCandlestick^ cs)
     arrowAnnotation->BackColor = cs->IsBullish ? Color::Green : Color::Red;
     arrowAnnotation->AnchorOffsetY = 5;
     // Set the anchor point for the annotation
-    arrowAnnotation->SetAnchor(chart_StockChart->Series["Series_OHLC"]->Points[index]);
+    arrowAnnotation->SetAnchor(chart_StockChart->Series["Series_OHLC"]->Points[csIndex]);
     // Add the annotation to the chart
     chart_StockChart->Annotations->Add(arrowAnnotation);
+}
+
+void Form_StockView::CreateListOfAnnotations(List<smartCandlestick^>^ cs, String^ patternName)
+{
+    if (cs->Count == 2)
+    {
+        CreateAnnotation()
+    }
+    else if (cs->Count == 3)
+    {
+
+    }
 }
 
 
@@ -277,7 +310,6 @@ void Form_StockView::getStockDataFromFilename()
 void Form_StockView::filterCandlesticksByDate()
 {   
     bindingCandlesticks->Clear();
-    patternTracker->Clear();
     // Assigns the filtered Candlesticks to the bindingCandlesticks global variable
     bindingCandlesticks = filterCandlesticksByDate(allCandlesticks, dateTimePicker_DateBegin->Value, dateTimePicker_DateEnd->Value);
 }
@@ -323,7 +355,6 @@ BindingList<smartCandlestick^>^ Form_StockView::filterCandlesticksByDate(List<sm
     if (allCandlesticks != nullptr && allCandlesticks->Count > 0) {
         // Clear the previous binding candlesticks
         bindingCandlesticks->Clear();
-        patternTracker->Clear();
 
         // Loop through all candlesticks
         for each (smartCandlestick ^ cs in allCandlesticks)
@@ -334,41 +365,9 @@ BindingList<smartCandlestick^>^ Form_StockView::filterCandlesticksByDate(List<sm
             // If the candlestick date is within the specified range, add it to the filtered list
             if (cs->Date >= dateTimePicker_DateBegin->Value)
             {
-                // Loop through all patterns
-                for each (KeyValuePair<String^, bool> ^ pattern in cs->Patterns)
-                {
-                    // checks if the current pattern is true
-                    if (pattern->Value)
-                    {
-                        // If pattern key is already present in patternTracker, add cs to its associated list
-                        if (patternTracker->ContainsKey(pattern->Key))
-                        {
-                            patternTracker[pattern->Key]->Add(cs);
-                        }
-                        // If pattern key is not present, create a new list with cs and add it to patternTracker
-                        else
-                        {
-                            List<smartCandlestick^>^ newList = gcnew List<smartCandlestick^>();
-                            newList->Add(cs);
-                            patternTracker->Add(pattern->Key, newList);
-                        }
-                    }
-                    // If the current pattern is false
-                    else
-                    {
-                        // If pattern key is already present in patternTracker, continue to the next pattern
-                        if (patternTracker->ContainsKey(pattern->Key))
-                            continue;
-                        // If pattern key is not present, create a new empty list and add it to patternTracker
-                        else
-                        {
-                            List<smartCandlestick^>^ newList = gcnew List<smartCandlestick^>();
-                            patternTracker->Add(pattern->Key, newList);
-                        }
-                    }
-                }
                 // Add the candlestick to the filtered list
                 filteredCandlesticks->Add(cs);
+                allCandlestteasdasdasdicks->Add(cs);
             }
         }
     }

@@ -129,6 +129,7 @@
   <ItemGroup>
     <ClCompile Include="candlestick.cpp" />
     <ClCompile Include="Form_StockView.cpp" />
+    <ClCompile Include="recognizer.cpp" />
     <ClCompile Include="smartCandlestick.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -136,6 +137,7 @@
     <ClInclude Include="Form_StockView.h">
       <FileType>CppForm</FileType>
     </ClInclude>
+    <ClInclude Include="recognizer.h" />
     <ClInclude Include="smartCandlestick.h" />
   </ItemGroup>
   <ItemGroup>
