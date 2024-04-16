@@ -90,6 +90,39 @@ namespace Stonks_Cpp {
 		virtual bool recognizePattern(smartCandlestick^ cs) override;
 	};
 
+	public ref class bullishEngulfingRecognizer : public recognizer
+	{
+		public:
+			bullishEngulfingRecognizer();
+
+			virtual bool recognizePattern(List<smartCandlestick^>^ sc) override;
+	};
+
+	public ref class bearishEngulfingRecognizer : public recognizer
+	{
+		public:
+			bearishEngulfingRecognizer();
+
+		virtual bool recognizePattern(List<smartCandlestick^>^ sc) override;
+	};
+
+
+	public ref class bullishHaramiRecognizer : public recognizer
+	{
+		public:
+			bullishHaramiRecognizer();
+
+		virtual bool recognizePattern(List<smartCandlestick^>^ sc) override;
+	};
+
+	public ref class bearishHaramiRecognizer : public recognizer
+	{
+		public:
+			bearishHaramiRecognizer();
+
+		virtual bool recognizePattern(List<smartCandlestick^>^ sc) override;
+	};
+
 	public ref class peakRecognizer : public recognizer
 	{
 	public:

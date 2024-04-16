@@ -234,8 +234,7 @@ namespace Stonks_Cpp {
 			// Binding list of candlesticks used for data binding with UI controls.
 			BindingList<smartCandlestick^>^ bindingCandlesticks = gcnew BindingList<smartCandlestick^>();
 
-			// Dictionary to track patterns and associated candlesticks.
-			// Key: Pattern name, Value: List of candlesticks matching the pattern.
+			// List of all the recognizers
 			List<recognizer^> recognizerTracker;
 
 		public:
@@ -286,6 +285,7 @@ namespace Stonks_Cpp {
 			// Creates an arrow annotation on the chart to highlight a specific candlestick.
 			void CreateAnnotation(smartCandlestick^ cs, Color color);
 
+			// Creates a list of annotations for multi-candlestick patterns
 			void CreateListOfAnnotations(List<smartCandlestick^>^ cs, String^ patternName);
 
 			// Normalizes the Y-axis range of the chart to ensure all data points are visible with some padding.

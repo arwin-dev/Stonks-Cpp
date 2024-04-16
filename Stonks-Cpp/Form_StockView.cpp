@@ -182,33 +182,25 @@ System::Void Form_StockView::comboBox_patterns_SelectedIndexChanged(System::Obje
 
     // Get the selected pattern from the comboBox_patterns
     String^ selectedPattern = comboBox_patterns->SelectedItem->ToString();
-    recognizer^ selected = recognizerTracker[comboBox_patterns->SelectedIndex];
+
+    recognizer^ selectedRecognizer = recognizerTracker[comboBox_patterns->SelectedIndex];
     // Retrieve the list of candlesticks associated with the selected pattern from patternTracker
     List<smartCandlestick^>^ pattern = nullptr;
-    //if (patternTracker->TryGetValue(selectedPattern, pattern))
-    //{
-    //    // Iterate through each candlestick in the pattern and create annotations for them
-    //    for each (smartCandlestick ^ candlestick in pattern)
-    //    {
-    //        CreateAnnotation(candlestick);
-    //    }
-    //}
 
     for (int i = 0; i < bindingCandlesticks->Count; i++)
     {
-        if (selected->recognizePattern(bindingCandlesticks[i]) && selected->patternSize == 1)
+        if (selectedRecognizer->recognizePattern(bindingCandlesticks[i]) && selectedRecognizer->patternSize == 1)
         {
             CreateAnnotation(bindingCandlesticks[i], Color::Red);
         }
-        else if (i < bindingCandlesticks->Count - selected->patternSize + 1)
+        else if (i < bindingCandlesticks->Count - selectedRecognizer->patternSize + 1)
         {
-            List<smartCandlestick^>^ subList = filteredCandlesticks->GetRange(i, selected->patternSize);
-            if (selected->recognizePattern(subList))
+            List<smartCandlestick^>^ subList = filteredCandlesticks->GetRange(i, selectedRecognizer->patternSize);
+            if (selectedRecognizer->recognizePattern(subList))
             {
-                CreateListOfAnnotations(subList, selected->patternName);
+                CreateListOfAnnotations(subList, selectedRecognizer->patternName);
             }
         }
-
     }
 
     // Refresh the chart to reflect the changes

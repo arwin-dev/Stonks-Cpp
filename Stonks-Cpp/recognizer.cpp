@@ -109,6 +109,78 @@ namespace Stonks_Cpp {
 		return cs->IsInvertedHammer;
 	}
 
+	bullishEngulfingRecognizer::bullishEngulfingRecognizer() : recognizer(2, "Bullish Engulfing")
+	{
+
+	}
+
+	bool bullishEngulfingRecognizer::recognizePattern(List<smartCandlestick^>^ sc)
+	{
+		if (sc->Count == 2)
+		{
+			smartCandlestick^ sc1 = sc[0];
+			smartCandlestick^ sc2 = sc[1];
+
+			return (sc2->Close > sc2->Open) && (sc1->Close < sc1->Open) && (sc2->Close > sc1->Open) && (sc2->Open < sc1->Close);
+		}
+
+		return false;
+	}
+
+	bearishEngulfingRecognizer::bearishEngulfingRecognizer() : recognizer(2, "Bearish Engulfing")
+	{
+
+	}
+
+	bool bearishEngulfingRecognizer::recognizePattern(List<smartCandlestick^>^ sc)
+	{
+		if (sc->Count == 2)
+		{
+			smartCandlestick^ sc1 = sc[0];
+			smartCandlestick^ sc2 = sc[1];
+
+			return (sc2->Close < sc2->Open) && (sc1->Close > sc1->Open) && (sc2->Close < sc1->Open) && (sc2->Open > sc1->Close);
+		}
+
+		return false;
+	}
+
+	bullishHaramiRecognizer::bullishHaramiRecognizer() : recognizer(2, "Bullish Harami")
+	{
+
+	}
+
+	bool bullishHaramiRecognizer::recognizePattern(List<smartCandlestick^>^ sc)
+	{
+		if (sc->Count == 2)
+		{
+			smartCandlestick^ sc1 = sc[0];
+			smartCandlestick^ sc2 = sc[1];
+
+			return ((sc2->Close > sc2->Open) && (sc1->Close < sc1->Open) && (sc2->Close < sc1->Open) && (sc2->Open > sc1->Open));
+		}
+
+		return false;
+	}
+
+	bearishHaramiRecognizer::bearishHaramiRecognizer() : recognizer(2, "Bearish Harami")
+	{
+
+	}
+
+	bool bearishHaramiRecognizer::recognizePattern(List<smartCandlestick^>^ sc)
+	{
+		if (sc->Count == 2)
+		{
+			smartCandlestick^ sc1 = sc[0];
+			smartCandlestick^ sc2 = sc[1];
+
+			return ((sc2->Close < sc2->Open) && (sc1->Close > sc1->Open) && (sc2->Close > sc1->Open) && (sc2->Open < sc1->Close));
+		}
+
+		return false;
+	}
+
 	peakRecognizer::peakRecognizer() : recognizer(3, "Peak")
 	{
 
