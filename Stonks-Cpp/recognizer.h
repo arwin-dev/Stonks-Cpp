@@ -92,10 +92,18 @@ namespace Stonks_Cpp {
 
 	public ref class peakRecognizer : public recognizer
 	{
-		public:
-			peakRecognizer();
+	public:
+		peakRecognizer();
 
-			virtual bool recognizePattern(List<smartCandlestick^>^ sc) override;
+		virtual bool recognizePattern(List<smartCandlestick^>^ sc) override;
+	};
+
+	public ref class valleyRecognizer : public recognizer
+	{
+		public:
+			valleyRecognizer();
+
+		virtual bool recognizePattern(List<smartCandlestick^>^ sc) override;
 	};
 }
 

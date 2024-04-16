@@ -127,4 +127,23 @@ namespace Stonks_Cpp {
 
 		return false;
 	}
+
+	valleyRecognizer::valleyRecognizer() : recognizer(3, "Valley")
+	{
+		
+	}
+
+	bool valleyRecognizer::recognizePattern(List<smartCandlestick^>^ sc)
+	{
+		if (sc->Count == 3)
+		{
+			smartCandlestick^ sc1 = sc[0];
+			smartCandlestick^ sc2 = sc[1];
+			smartCandlestick^ sc3 = sc[2];
+
+			return (sc2->Low > sc1->Low) && (sc2->Low > sc3->Low);
+		}
+
+		return false;
+	}
 }

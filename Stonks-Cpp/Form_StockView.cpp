@@ -198,11 +198,11 @@ System::Void Form_StockView::comboBox_patterns_SelectedIndexChanged(System::Obje
     {
         if (selected->recognizePattern(bindingCandlesticks[i]) && selected->patternSize == 1)
         {
-            CreateAnnotation(i, Color::Red);
+            CreateAnnotation(bindingCandlesticks[i], Color::Red);
         }
         else if (i < bindingCandlesticks->Count - selected->patternSize + 1)
         {
-            List<smartCandlestick^>^ subList = allCandlestteasdasdasdicks->GetRange(i, selected->patternSize);
+            List<smartCandlestick^>^ subList = filteredCandlesticks->GetRange(i, selected->patternSize);
             if (selected->recognizePattern(subList))
             {
                 CreateListOfAnnotations(subList, selected->patternName);
@@ -220,10 +220,18 @@ System::Void Form_StockView::comboBox_patterns_SelectedIndexChanged(System::Obje
 /// Creates an arrow annotation on the chart to highlight a specific candlestick.
 /// </summary>
 /// <param name="cs">The smartCandlestick to create the annotation for.</param>
-void Form_StockView::CreateAnnotation(int csIndex, Color color )
+void Form_StockView::CreateAnnotation(smartCandlestick^ cs, Color color )
 {
 
-    smartCandlestick^ cs = bindingCandlesticks[csIndex];
+    int index = 0;
+    for (int i = 0; i < bindingCandlesticks->Count; i++)
+    {
+        if (cs == bindingCandlesticks[i])
+        {
+            index = i;
+            break;
+        }
+    }
 
     // Create a text annotation
     ArrowAnnotation^ arrowAnnotation = gcnew ArrowAnnotation();
@@ -241,7 +249,7 @@ void Form_StockView::CreateAnnotation(int csIndex, Color color )
     arrowAnnotation->BackColor = cs->IsBullish ? Color::Green : Color::Red;
     arrowAnnotation->AnchorOffsetY = 5;
     // Set the anchor point for the annotation
-    arrowAnnotation->SetAnchor(chart_StockChart->Series["Series_OHLC"]->Points[csIndex]);
+    arrowAnnotation->SetAnchor(chart_StockChart->Series["Series_OHLC"]->Points[index]);
     // Add the annotation to the chart
     chart_StockChart->Annotations->Add(arrowAnnotation);
 }
@@ -250,11 +258,14 @@ void Form_StockView::CreateListOfAnnotations(List<smartCandlestick^>^ cs, String
 {
     if (cs->Count == 2)
     {
-        CreateAnnotation()
+        CreateAnnotation(cs[0], Color::Red);
+        CreateAnnotation(cs[1], Color::Red);
     }
     else if (cs->Count == 3)
     {
-
+        CreateAnnotation(cs[0], Color::Red);
+        CreateAnnotation(cs[1], Color::Red);
+        CreateAnnotation(cs[2], Color::Red);
     }
 }
 
@@ -310,8 +321,16 @@ void Form_StockView::getStockDataFromFilename()
 void Form_StockView::filterCandlesticksByDate()
 {   
     bindingCandlesticks->Clear();
-    // Assigns the filtered Candlesticks to the bindingCandlesticks global variable
-    bindingCandlesticks = filterCandlesticksByDate(allCandlesticks, dateTimePicker_DateBegin->Value, dateTimePicker_DateEnd->Value);
+    filteredCandlesticks->Clear();
+
+    // Assigns the filtered Candlesticks to the filteredCandlesticks global variable
+    filteredCandlesticks = filterCandlesticksByDate(allCandlesticks, dateTimePicker_DateBegin->Value, dateTimePicker_DateEnd->Value);
+    
+
+    for each (smartCandlestick^ cs in filteredCandlesticks)
+    {
+        bindingCandlesticks->Add(cs);
+    }
 }
 
 /// <summary>
@@ -346,15 +365,14 @@ System::Void Form_StockView::button_Refresh_Click(System::Object^ sender, System
 /// <param name="startDate">Fitler Start Date</param>
 /// <param name="endDate">Filter End Date</param>
 /// <returns>filteredCandlesticks - filtered Candlesticks</returns>
-BindingList<smartCandlestick^>^ Form_StockView::filterCandlesticksByDate(List<smartCandlestick^>^ allCandlesticks, DateTime startDate, DateTime endDate)
+List<smartCandlestick^>^ Form_StockView::filterCandlesticksByDate(List<smartCandlestick^>^ allCandlesticks, DateTime startDate, DateTime endDate)
 {
     // Create a new list to hold filtered candlesticks
-    BindingList<smartCandlestick^>^ filteredCandlesticks = gcnew BindingList<smartCandlestick^>();
+    List<smartCandlestick^>^ filteredCandlesticks = gcnew List<smartCandlestick^>();
 
     // Check if there are candlesticks and the count is greater than 0
     if (allCandlesticks != nullptr && allCandlesticks->Count > 0) {
         // Clear the previous binding candlesticks
-        bindingCandlesticks->Clear();
 
         // Loop through all candlesticks
         for each (smartCandlestick ^ cs in allCandlesticks)
@@ -367,7 +385,6 @@ BindingList<smartCandlestick^>^ Form_StockView::filterCandlesticksByDate(List<sm
             {
                 // Add the candlestick to the filtered list
                 filteredCandlesticks->Add(cs);
-                allCandlestteasdasdasdicks->Add(cs);
             }
         }
     }

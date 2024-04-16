@@ -227,7 +227,9 @@ namespace Stonks_Cpp {
 			// List of candlesticks containing all the data read from the file.
 			// This list is populated when loading stock data from a file.
 			List<smartCandlestick^>^ allCandlesticks;
-			List<smartCandlestick^>^ allCandlestteasdasdasdicks = gcnew List<smartCandlestick^>();
+
+			// List of filtered candlesticks
+			List<smartCandlestick^>^ filteredCandlesticks = gcnew List<smartCandlestick^>();
 
 			// Binding list of candlesticks used for data binding with UI controls.
 			BindingList<smartCandlestick^>^ bindingCandlesticks = gcnew BindingList<smartCandlestick^>();
@@ -246,7 +248,7 @@ namespace Stonks_Cpp {
 			List<smartCandlestick^>^ getStockDataFromFilename(String^ filename);
 
 			// Filters the candlesticks data based on the specified date range.
-			BindingList<smartCandlestick^>^ filterCandlesticksByDate(List<smartCandlestick^>^ allCandlesticks, DateTime startDate, DateTime endDate);
+			List<smartCandlestick^>^ filterCandlesticksByDate(List<smartCandlestick^>^ allCandlesticks, DateTime startDate, DateTime endDate);
 
 			// Extracts stock data from the selected file and updates the form's title with the file name.
 			void getStockDataFromFilename();
@@ -282,7 +284,7 @@ namespace Stonks_Cpp {
 			System::Void comboBox_patterns_SelectedIndexChanged(System::Object^ sender, System::EventArgs^ e);
 
 			// Creates an arrow annotation on the chart to highlight a specific candlestick.
-			void CreateAnnotation(int csIndex, Color color);
+			void CreateAnnotation(smartCandlestick^ cs, Color color);
 
 			void CreateListOfAnnotations(List<smartCandlestick^>^ cs, String^ patternName);
 
