@@ -318,7 +318,7 @@ void Form_StockView::filterCandlesticksByDate()
     // Assigns the filtered Candlesticks to the filteredCandlesticks global variable
     filteredCandlesticks = filterCandlesticksByDate(allCandlesticks, dateTimePicker_DateBegin->Value, dateTimePicker_DateEnd->Value);
     
-
+    // Adds each candlestick from the filteredCandlesticks to the bindingCandlesticks global variable
     for each (smartCandlestick^ cs in filteredCandlesticks)
     {
         bindingCandlesticks->Add(cs);
