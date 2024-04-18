@@ -215,15 +215,7 @@ System::Void Form_StockView::comboBox_patterns_SelectedIndexChanged(System::Obje
 void Form_StockView::CreateAnnotation(smartCandlestick^ cs, Color color )
 {
 
-    int index = 0;
-    for (int i = 0; i < bindingCandlesticks->Count; i++)
-    {
-        if (cs == bindingCandlesticks[i])
-        {
-            index = i;
-            break;
-        }
-    }
+    int index = bindingCandlesticks->IndexOf(cs);
 
     // Create a text annotation
     ArrowAnnotation^ arrowAnnotation = gcnew ArrowAnnotation();

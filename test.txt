@@ -1,0 +1,23 @@
+int index = bindingCandlesticks->IndexOf(cs);
+
+// Check if the index is valid
+if (index >= 0 && index < bindingCandlesticks->Count - 1)
+{
+    // Calculate the width of the annotation
+    //double width = Math::Abs((cs->Date - bindingCandlesticks[index + 1]->Date).TotalMilliseconds);
+    double test = chart_StockChart->Width / (bindingCandlesticks->Count * (chart_StockChart->ChartAreas[0]->AxisX->Maximum - chart_StockChart->ChartAreas[0]->AxisX->Minimum));
+
+    // Create the RectangleAnnotation and set its properties
+    RectangleAnnotation^ anno = gcnew RectangleAnnotation();
+    anno->AxisX = chart_StockChart->ChartAreas[0]->AxisX;
+    anno->AxisY = chart_StockChart->ChartAreas[0]->AxisY;
+    anno->Width = test ;
+    anno->Height = cs->Range;
+    anno->BackColor = Color::FromArgb(128, color); // Use the specified color parameter
+
+    anno->AnchorDataPoint = chart_StockChart->Series["Series_OHLC"]->Points[index];
+    anno->AnchorOffsetY = -(cs->Range) / 2;
+
+    // Add the annotation to the chart
+    chart_StockChart->Annotations->Add(anno);
+}
