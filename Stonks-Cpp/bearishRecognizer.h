@@ -1,0 +1,15 @@
+#pragma once
+#include "recognizer.h" 
+
+namespace Stonks_Cpp {
+	// Concrete class for recognizing bearish patterns
+	public ref class bearishRecognizer : public recognizer
+	{
+		public:
+			bearishRecognizer();
+
+			// Override method to recognize a bearish pattern for a single candlestick
+			virtual bool recognize(smartCandlestick^ cs) override;
+	};
+}
+

@@ -127,18 +127,48 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="bearishEngulfingRecognizer.cpp" />
+    <ClCompile Include="bearishHaramiRecognizer.cpp" />
+    <ClCompile Include="bearishRecognizer.cpp" />
+    <ClCompile Include="bullishEngulfingRecognizer.cpp" />
+    <ClCompile Include="bullishHaramiRecognizer.cpp" />
+    <ClCompile Include="bullishRecognizer.cpp" />
     <ClCompile Include="candlestick.cpp" />
+    <ClCompile Include="dojiRecognizer.cpp" />
+    <ClCompile Include="dragonFlyDojiRecognizer.cpp" />
     <ClCompile Include="Form_StockView.cpp" />
+    <ClCompile Include="gravestoneDojiRecognizer.cpp" />
+    <ClCompile Include="hammerRecognizer.cpp" />
+    <ClCompile Include="invertedHammerRecognizer.cpp" />
+    <ClCompile Include="marubozuRecognizer.cpp" />
+    <ClCompile Include="neutralRecognizer.cpp" />
+    <ClCompile Include="peakRecognizer.cpp" />
     <ClCompile Include="recognizer.cpp" />
     <ClCompile Include="smartCandlestick.cpp" />
+    <ClCompile Include="valleyRecognizer.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="bearishEngulfingRecognizer.h" />
+    <ClInclude Include="bearishHaramiRecognizer.h" />
+    <ClInclude Include="bearishRecognizer.h" />
+    <ClInclude Include="bullishEngulfingRecognizer.h" />
+    <ClInclude Include="bullishHaramiRecognizer.h" />
+    <ClInclude Include="bullishRecognizer.h" />
     <ClInclude Include="candlestick.h" />
+    <ClInclude Include="dojiRecognizer.h" />
+    <ClInclude Include="dragonFlyDojiRecognizer.h" />
     <ClInclude Include="Form_StockView.h">
       <FileType>CppForm</FileType>
     </ClInclude>
+    <ClInclude Include="gravestoneDojiRecognizer.h" />
+    <ClInclude Include="hammerRecognizer.h" />
+    <ClInclude Include="invertedHammerRecognizer.h" />
+    <ClInclude Include="marubozuRecognizer.h" />
+    <ClInclude Include="neutralRecognizer.h" />
+    <ClInclude Include="peakRecognizer.h" />
     <ClInclude Include="recognizer.h" />
     <ClInclude Include="smartCandlestick.h" />
+    <ClInclude Include="valleyRecognizer.h" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Form_StockView.resx">

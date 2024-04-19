@@ -201,7 +201,7 @@ System::Void Form_StockView::comboBox_patterns_SelectedIndexChanged(System::Obje
     for (int i = 0; i < bindingCandlesticks->Count; i++)
     {
         // Check if the selected recognizer recognizes the pattern for this candlestick and if the pattern size is 1
-        if (selectedRecognizer->recognizePattern(bindingCandlesticks[i]) && selectedRecognizer->patternSize == 1)
+        if (selectedRecognizer->recognize(bindingCandlesticks[i]) && selectedRecognizer->patternSize == 1)
         {
             // If recognized, create an annotation for the candlestick
             CreateAnnotation(bindingCandlesticks[i], "");
@@ -213,7 +213,7 @@ System::Void Form_StockView::comboBox_patterns_SelectedIndexChanged(System::Obje
             List<smartCandlestick^>^ subList = filteredCandlesticks->GetRange(i, selectedRecognizer->patternSize);
 
             // Check if the recognizer recognizes the pattern in the sublist
-            if (selectedRecognizer->recognizePattern(subList))
+            if (selectedRecognizer->recognize(subList))
             {
                 // If recognized, create annotations for the sublist of candlesticks with the pattern name
                 CreateListOfAnnotations(subList, selectedRecognizer->patternName);
