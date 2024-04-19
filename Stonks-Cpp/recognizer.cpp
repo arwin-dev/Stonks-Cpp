@@ -258,7 +258,7 @@ namespace Stonks_Cpp {
 			smartCandlestick^ sc3 = sc[2];
 
 			// Check conditions for valley pattern
-			return (sc2->Low > sc1->Low) && (sc2->Low > sc3->Low);
+			return (sc2->Low < sc1->Low) && (sc2->Low < sc3->Low);
 		}
 
 		return false;

@@ -1,5 +1,5 @@
 #pragma once
-#include "smartCandlestick.h" // Include necessary header file
+#include "smartCandlestick.h" 
 
 using namespace System;
 using namespace System::Collections::Generic;

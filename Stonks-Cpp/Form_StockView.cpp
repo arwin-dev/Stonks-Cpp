@@ -145,24 +145,32 @@ Form_StockView::Form_StockView(String^ filename, DateTime startDate, DateTime en
 
 
 /// <summary>
-/// Initializes the pattern combo box with patterns stored in the patternTracker.
+/// Initializes the pattern ComboBox by populating it with the names of recognizer patterns.
 /// </summary>
 void Form_StockView::InitializePatternComboBox()
 {
     // Clear existing items in the combo box
     comboBox_patterns->Items->Clear();
 
+    // Get the base type for recognizers
     Type^ baseType = recognizer::typeid;
+
+    // Retrieve all types in the executing assembly
     array<Type^>^ allTypes = Assembly::GetExecutingAssembly()->GetTypes();
 
+    // Iterate through each type
     for each (Type ^ type in allTypes)
     {
+        // Check if the type is a subclass of the base type
         if (type->IsSubclassOf(baseType))
         {
+            // Create an instance of the recognizer type
             recognizer^ recognizerInstance = dynamic_cast<recognizer^>(Activator::CreateInstance(type));
 
             // Access the patternName property and add it to the ComboBox
             comboBox_patterns->Items->Add(recognizerInstance->patternName);
+
+            // Add the recognizer instance to the recognizer tracker
             recognizerTracker.Add(recognizerInstance);
         }
     }
@@ -183,21 +191,31 @@ System::Void Form_StockView::comboBox_patterns_SelectedIndexChanged(System::Obje
     // Get the selected pattern from the comboBox_patterns
     String^ selectedPattern = comboBox_patterns->SelectedItem->ToString();
 
+    // Retrieve the recognizer associated with the selected pattern
     recognizer^ selectedRecognizer = recognizerTracker[comboBox_patterns->SelectedIndex];
-    // Retrieve the list of candlesticks associated with the selected pattern from patternTracker
+
+    // Initialize a variable to hold the pattern
     List<smartCandlestick^>^ pattern = nullptr;
 
+    // Iterate through each candlestick in the bindingCandlesticks list
     for (int i = 0; i < bindingCandlesticks->Count; i++)
     {
+        // Check if the selected recognizer recognizes the pattern for this candlestick and if the pattern size is 1
         if (selectedRecognizer->recognizePattern(bindingCandlesticks[i]) && selectedRecognizer->patternSize == 1)
         {
-            CreateAnnotation(bindingCandlesticks[i], Color::Red);
+            // If recognized, create an annotation for the candlestick
+            CreateAnnotation(bindingCandlesticks[i], "");
         }
+        // If the pattern size is greater than 1, and there are enough candlesticks remaining to form a complete pattern
         else if (i < bindingCandlesticks->Count - selectedRecognizer->patternSize + 1)
         {
+            // Extract a sublist of candlesticks for the recognizer to analyze
             List<smartCandlestick^>^ subList = filteredCandlesticks->GetRange(i, selectedRecognizer->patternSize);
+
+            // Check if the recognizer recognizes the pattern in the sublist
             if (selectedRecognizer->recognizePattern(subList))
             {
+                // If recognized, create annotations for the sublist of candlesticks with the pattern name
                 CreateListOfAnnotations(subList, selectedRecognizer->patternName);
             }
         }
@@ -208,50 +226,76 @@ System::Void Form_StockView::comboBox_patterns_SelectedIndexChanged(System::Obje
 }
 
 
+
 /// <summary>
 /// Creates an arrow annotation on the chart to highlight a specific candlestick.
 /// </summary>
 /// <param name="cs">The smartCandlestick to create the annotation for.</param>
-void Form_StockView::CreateAnnotation(smartCandlestick^ cs, Color color )
+void Form_StockView::CreateAnnotation(smartCandlestick^ cs, String^ PatternName)
 {
+    int index = bindingCandlesticks->IndexOf(cs); // Find the index of the provided candlestick in the list
 
-    int index = bindingCandlesticks->IndexOf(cs);
-
-    // Create a text annotation
+    // Create an arrow annotation
     ArrowAnnotation^ arrowAnnotation = gcnew ArrowAnnotation();
-    // Set the axes for the annotationdghghfghnfghfghfghfgh
+
+    // Set the axes for the annotation
     arrowAnnotation->AxisX = chart_StockChart->ChartAreas[0]->AxisX;
     arrowAnnotation->AxisY = chart_StockChart->ChartAreas[0]->AxisY;
 
     // Set annotation properties
     arrowAnnotation->LineWidth = 1;
-    arrowAnnotation->Width = 0;
-    arrowAnnotation->Height = 5;
+    arrowAnnotation->Width = 0.2;
+    arrowAnnotation->Height = -5;
     arrowAnnotation->ArrowSize = 2;
-    arrowAnnotation->ForeColor = cs->IsBullish ? Color::Green : Color::Red;
-    arrowAnnotation->LineColor = cs->IsBullish ? Color::Red : Color::Green;
-    arrowAnnotation->BackColor = cs->IsBullish ? Color::Green : Color::Red;
-    arrowAnnotation->AnchorOffsetY = 5;
-    // Set the anchor point for the annotation
-    arrowAnnotation->SetAnchor(chart_StockChart->Series["Series_OHLC"]->Points[index]);
-    // Add the annotation to the chart
-    chart_StockChart->Annotations->Add(arrowAnnotation);
+    arrowAnnotation->ForeColor = cs->IsBullish ? Color::Green : Color::Red; // Set arrow color based on candlestick type
+    arrowAnnotation->LineColor = cs->IsBullish ? Color::Red : Color::Green; // Set arrow line color based on candlestick type
+    arrowAnnotation->BackColor = cs->IsBullish ? Color::Green : Color::Red; // Set arrow background color based on candlestick type
+    arrowAnnotation->AnchorOffsetY = -1; // Offset the arrow annotation vertically
+    arrowAnnotation->SetAnchor(chart_StockChart->Series["Series_OHLC"]->Points[index]); // Set the anchor point for the arrow annotation
+    arrowAnnotation->ClipToChartArea = "Chart_OHLC"; // Clip the annotation to the specified chart area
+    chart_StockChart->Annotations->Add(arrowAnnotation); // Add the arrow annotation to the chart
+
+    // If a pattern name is provided, create a text annotation
+    if (!String::IsNullOrEmpty(PatternName) && !String::IsNullOrWhiteSpace(PatternName))
+    {
+        TextAnnotation^ label = gcnew TextAnnotation();
+        label->AxisX = arrowAnnotation->AxisX;
+        label->AxisY = arrowAnnotation->AxisY;
+        label->Text = PatternName; // Set the text of the annotation to the provided pattern name
+        label->ForeColor = Color::Black; // Set the text color
+        label->Font = gcnew System::Drawing::Font("Arial", 8); // Set the font and size
+        label->AnchorOffsetY = -10; // Offset the text annotation vertically
+        label->AnchorAlignment = ContentAlignment::TopCenter; // Set the alignment of the text annotation
+        label->AnchorDataPoint = chart_StockChart->Series["Series_OHLC"]->Points[index]; // Anchor the text annotation to the same data point as the arrow annotation
+        label->ClipToChartArea = "Chart_OHLC"; // Clip the annotation to the specified chart area
+        chart_StockChart->Annotations->Add(label); // Add the text annotation to the chart
+    }
 }
 
+
+/// <summary>
+/// Creates annotations for a list of candlesticks, adding pattern names where applicable.
+/// </summary>
+/// <param name="cs">The list of candlesticks.</param>
+/// <param name="patternName">The name of the pattern to be added to annotations.</param>
 void Form_StockView::CreateListOfAnnotations(List<smartCandlestick^>^ cs, String^ patternName)
 {
+    // Check the number of candlesticks in the list
     if (cs->Count == 2)
     {
-        CreateAnnotation(cs[0], Color::Red);
-        CreateAnnotation(cs[1], Color::Red);
+        // If there are two candlesticks, create annotations for each
+        CreateAnnotation(cs[0], ""); // Create annotation for the first candlestick without pattern name
+        CreateAnnotation(cs[1], patternName); // Create annotation for the second candlestick with pattern name
     }
     else if (cs->Count == 3)
     {
-        CreateAnnotation(cs[0], Color::Red);
-        CreateAnnotation(cs[1], Color::Red);
-        CreateAnnotation(cs[2], Color::Red);
+        // If there are three candlesticks, create annotations for each
+        CreateAnnotation(cs[0], ""); // Create annotation for the first candlestick without pattern name
+        CreateAnnotation(cs[1], patternName); // Create annotation for the second candlestick with pattern name
+        CreateAnnotation(cs[2], ""); // Create annotation for the third candlestick without pattern name
     }
 }
+
 
 
 /// <summary>
