@@ -28,24 +28,11 @@ namespace Stonks_Cpp {
 			else
 			{
 				smartCandlestick^ sc2 = sc[index - offset];
-				bool check = (sc2->Close < sc2->Open) && (sc1->Close > sc1->Open) && (sc2->Close < sc1->Open) && (sc2->Open > sc1->Close);
+				smartCandlestick^ sc3 = sc[index + offset];
+				bool check = (sc2->High > sc1->High) && (sc2->High > sc3->High);
 				sc1->Patterns->Add(patternName, check);
 				return check;
 			}
 		}
-
-
-		// Check if there are exactly three candlesticks
-		if (sc->Count == 3)
-		{
-			smartCandlestick^ sc1 = sc[0];
-			smartCandlestick^ sc2 = sc[1];
-			smartCandlestick^ sc3 = sc[2];
-
-			// Check conditions for peak pattern
-			return (sc2->High > sc1->High) && (sc2->High > sc3->High);
-		}
-
-		return false;
 	}
 }
