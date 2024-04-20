@@ -10,16 +10,17 @@ namespace Stonks_Cpp {
 		this->patternName = name; // Set the pattern name
 	}
 
-	// Default implementation of recognizePattern for a single candlestick
-	bool recognizer::recognize(smartCandlestick^ cs)
-	{
-		return false; // Default implementation always returns false
-	}
-
 	// Default implementation of recognizePattern for a list of candlesticks
-	bool recognizer::recognize(List<smartCandlestick^>^ cs)
+	bool recognizer::recognize(List<smartCandlestick^>^ cs, int index)
 	{
 		return false; // Default implementation always returns false
 	}
 
+	void recognizer::recognizeAll(List<smartCandlestick^>^ listOfCandlesticks)
+	{
+		for (int i = 0; i < listOfCandlesticks->Count; i++)
+		{
+			recognize(listOfCandlesticks, i);
+		}
+	}
 }

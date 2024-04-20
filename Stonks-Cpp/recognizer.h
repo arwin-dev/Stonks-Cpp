@@ -16,10 +16,9 @@ namespace Stonks_Cpp {
 		// Constructor
 		recognizer(int size, String^ name);
 
-		// Abstract method to recognize a pattern for a single candlestick
-		virtual bool recognize(smartCandlestick^ cs);
-
 		// Abstract method to recognize a pattern for a list of candlesticks
-		virtual bool recognize(List<smartCandlestick^>^ cs);
+		virtual bool recognize(List<smartCandlestick^>^, int index);
+
+		void recognizeAll(List<smartCandlestick^>^ listOfCandlesticks);
 	};
 }

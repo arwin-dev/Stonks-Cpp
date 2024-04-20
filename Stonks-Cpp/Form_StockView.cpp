@@ -89,14 +89,14 @@ void Form_StockView::InitializeParent(String^ filename)
     // Clear chart annotations
     chart_StockChart->Annotations->Clear();
 
+    // Initialize pattern combo box
+    InitializePatternComboBox();
+
     // Retrieve stock data from the specified filename
     allCandlesticks = getStockDataFromFilename(filename);
 
     // Filter candlesticks by date
     filterCandlesticksByDate();
-
-    // Initialize pattern combo box
-    InitializePatternComboBox();
 
     // Normalize the chart
     normalizeChart();
@@ -127,14 +127,14 @@ Form_StockView::Form_StockView(String^ filename, DateTime startDate, DateTime en
     dateTimePicker_DateBegin->Value = startDate;
     dateTimePicker_DateEnd->Value = endDate;
 
+    // Initialize pattern combo box
+    InitializePatternComboBox();
+
     // Retrieve stock data from the specified filename
     allCandlesticks = getStockDataFromFilename(filename);
 
     // Filter candlesticks by date
     filterCandlesticksByDate();
-
-    // Initialize pattern combo box
-    InitializePatternComboBox();
 
     // Normalize the chart
     normalizeChart();
@@ -197,29 +197,29 @@ System::Void Form_StockView::comboBox_patterns_SelectedIndexChanged(System::Obje
     // Initialize a variable to hold the pattern
     List<smartCandlestick^>^ pattern = nullptr;
 
-    // Iterate through each candlestick in the bindingCandlesticks list
-    for (int i = 0; i < bindingCandlesticks->Count; i++)
-    {
-        // Check if the selected recognizer recognizes the pattern for this candlestick and if the pattern size is 1
-        if (selectedRecognizer->recognize(bindingCandlesticks[i]) && selectedRecognizer->patternSize == 1)
-        {
-            // If recognized, create an annotation for the candlestick
-            CreateAnnotation(bindingCandlesticks[i], "");
-        }
-        // If the pattern size is greater than 1, and there are enough candlesticks remaining to form a complete pattern
-        else if (i < bindingCandlesticks->Count - selectedRecognizer->patternSize + 1)
-        {
-            // Extract a sublist of candlesticks for the recognizer to analyze
-            List<smartCandlestick^>^ subList = filteredCandlesticks->GetRange(i, selectedRecognizer->patternSize);
+    //// Iterate through each candlestick in the bindingCandlesticks list
+    //for (int i = 0; i < bindingCandlesticks->Count; i++)
+    //{
+    //    // Check if the selected recognizer recognizes the pattern for this candlestick and if the pattern size is 1
+    //    if (selectedRecognizer->recognize(bindingCandlesticks[i]) && selectedRecognizer->patternSize == 1)
+    //    {
+    //        // If recognized, create an annotation for the candlestick
+    //        CreateAnnotation(bindingCandlesticks[i], "");
+    //    }
+    //    // If the pattern size is greater than 1, and there are enough candlesticks remaining to form a complete pattern
+    //    else if (i < bindingCandlesticks->Count - selectedRecognizer->patternSize + 1)
+    //    {
+    //        // Extract a sublist of candlesticks for the recognizer to analyze
+    //        List<smartCandlestick^>^ subList = filteredCandlesticks->GetRange(i, selectedRecognizer->patternSize);
 
-            // Check if the recognizer recognizes the pattern in the sublist
-            if (selectedRecognizer->recognize(subList))
-            {
-                // If recognized, create annotations for the sublist of candlesticks with the pattern name
-                CreateListOfAnnotations(subList, selectedRecognizer->patternName);
-            }
-        }
-    }
+    //        // Check if the recognizer recognizes the pattern in the sublist
+    //        if (selectedRecognizer->recognize(subList))
+    //        {
+    //            // If recognized, create annotations for the sublist of candlesticks with the pattern name
+    //            CreateListOfAnnotations(subList, selectedRecognizer->patternName);
+    //        }
+    //    }
+    //}
 
     // Refresh the chart to reflect the changes
     chart_StockChart->Refresh();
@@ -440,6 +440,11 @@ List<smartCandlestick^>^ Form_StockView::getStockDataFromFilename(String^ filena
     {
         // Create a new candlestick object and add it to the list
         listOfCandlesticks->Add(gcnew smartCandlestick(line));
+    }
+
+    for each (recognizer^ r in recognizerTracker)
+    {
+        r->recognizeAll(listOfCandlesticks);
     }
 
     return listOfCandlesticks;
