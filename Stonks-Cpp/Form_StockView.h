@@ -237,6 +237,9 @@ namespace Stonks_Cpp {
 			// List of all the recognizers
 			List<recognizer^> recognizerTracker;
 
+			double chartMax;
+			double chartMin;
+
 		public:
 			// Constructor for Form_StockView.
 			// Initializes the form with stock data from a file and specified date range.

@@ -8,19 +8,31 @@ namespace Stonks_Cpp {
 	}
 
 	// Override method to recognize a valley pattern for a list of candlesticks
-	bool valleyRecognizer::recognize(List<smartCandlestick^>^ sc)
+	bool valleyRecognizer::recognize(List<smartCandlestick^>^ sc, int index)
 	{
-		// Check if there are exactly three candlesticks
-		if (sc->Count == 3)
+
+		smartCandlestick^ sc1 = sc[index];
+		bool value;
+		if (sc1->Patterns->TryGetValue(patternName, value))
 		{
-			smartCandlestick^ sc1 = sc[0];
-			smartCandlestick^ sc2 = sc[1];
-			smartCandlestick^ sc3 = sc[2];
-
-			// Check conditions for valley pattern
-			return (sc2->Low < sc1->Low) && (sc2->Low < sc3->Low);
+			return value;
 		}
-
-		return false;
+		else
+		{
+			int offset = patternSize / 2;
+			if ((index < offset) || (index == sc->Count - offset))
+			{
+				sc1->Patterns->Add(patternName, false);
+				return false;
+			}
+			else
+			{
+				smartCandlestick^ sc2 = sc[index - offset];
+				smartCandlestick^ sc3 = sc[index + offset];
+				bool check = (sc2->Low < sc1->Low) && (sc2->Low < sc3->Low);
+				sc1->Patterns->Add(patternName, check);
+				return check;
+			}
+		}
 	}
 }

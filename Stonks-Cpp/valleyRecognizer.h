@@ -9,7 +9,7 @@ namespace Stonks_Cpp {
 		valleyRecognizer();
 
 		// Override method to recognize a bullish pattern for a single candlestick
-		virtual bool recognize(List<smartCandlestick^>^ sc) override;
+		virtual bool recognize(List<smartCandlestick^>^ sc, int index) override;
 	};
 }
 

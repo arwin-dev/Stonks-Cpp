@@ -197,29 +197,53 @@ System::Void Form_StockView::comboBox_patterns_SelectedIndexChanged(System::Obje
     // Initialize a variable to hold the pattern
     List<smartCandlestick^>^ pattern = nullptr;
 
-    //// Iterate through each candlestick in the bindingCandlesticks list
-    //for (int i = 0; i < bindingCandlesticks->Count; i++)
-    //{
-    //    // Check if the selected recognizer recognizes the pattern for this candlestick and if the pattern size is 1
-    //    if (selectedRecognizer->recognize(bindingCandlesticks[i]) && selectedRecognizer->patternSize == 1)
-    //    {
-    //        // If recognized, create an annotation for the candlestick
-    //        CreateAnnotation(bindingCandlesticks[i], "");
-    //    }
-    //    // If the pattern size is greater than 1, and there are enough candlesticks remaining to form a complete pattern
-    //    else if (i < bindingCandlesticks->Count - selectedRecognizer->patternSize + 1)
-    //    {
-    //        // Extract a sublist of candlesticks for the recognizer to analyze
-    //        List<smartCandlestick^>^ subList = filteredCandlesticks->GetRange(i, selectedRecognizer->patternSize);
+    for (int i = 0; i < bindingCandlesticks->Count; i++)
+    {
+        smartCandlestick^ cs = bindingCandlesticks[i];
+        DataPoint^ point = chart_StockChart->Series["Series_OHLC"]->Points[i];
+        
+        if (cs->Patterns[selectedPattern])
+        {
+            if (selectedRecognizer->patternSize > 1)
+            {
+                if (i == 0 || ((i == bindingCandlesticks->Count - 1) && selectedRecognizer->patternSize == 3))
+                {
+                    continue;
+                }
 
-    //        // Check if the recognizer recognizes the pattern in the sublist
-    //        if (selectedRecognizer->recognize(subList))
-    //        {
-    //            // If recognized, create annotations for the sublist of candlesticks with the pattern name
-    //            CreateListOfAnnotations(subList, selectedRecognizer->patternName);
-    //        }
-    //    }
-    //}
+                RectangleAnnotation^ rectangle = gcnew RectangleAnnotation();
+                rectangle->SetAnchor(point);
+                double Ymax, Ymin;
+                double width = (90.0 / bindingCandlesticks->Count) * selectedRecognizer->patternSize;
+                if (selectedRecognizer->patternSize == 2)
+                {
+                    Ymax = (int)(Math::Max(cs->High, bindingCandlesticks[i - 1]->High));
+                    Ymin = (int)(Math::Min(cs->Low, bindingCandlesticks[i - 1]->Low));
+                    rectangle->AnchorOffsetX = ((width / selectedRecognizer->patternSize) / 2 - 0.25) * (-1);
+                    rectangle->AnchorOffsetY = ((width / selectedRecognizer->patternSize) / 2 - 0.25) * (-1);
+                }
+                else
+                {
+                    Ymax = (int)(Math::Max(cs->High, Math::Max(bindingCandlesticks[i + 1]->High, bindingCandlesticks[i - 1]->High)));
+                    Ymin = (int)(Math::Min(cs->Low, Math::Min(bindingCandlesticks[i + 1]->Low, bindingCandlesticks[i - 1]->Low)));
+                }
+
+                double height = 40.0 * (Ymax - Ymin) / (chartMax - chartMin); ; //Scale height to chart bounds
+                rectangle->Height = -height; 
+                rectangle->Width = width;             //Set width and hight
+                rectangle->Y = Ymax;                                             //Set Y to highest Y value for candlesticks
+                rectangle->BackColor = Color::Transparent;                        //Set area to transparent to see chart
+                rectangle->LineWidth = 2;                                        //Set perimeter width
+                rectangle->LineDashStyle = ChartDashStyle::Dash;                  //Set perimeter style to dashed
+                rectangle->AnchorOffsetY = 10;
+                //Add annotation to chart
+                chart_StockChart->Annotations->Add(rectangle);
+            }
+            
+            CreateAnnotation(cs, "");
+            
+        }
+    }
 
     // Refresh the chart to reflect the changes
     chart_StockChart->Refresh();
@@ -325,8 +349,10 @@ void Form_StockView::normalizeChart()
 
     // Set the minimum value of the Y-axis of the chart to 90% of the minimum value found
     chart_StockChart->ChartAreas["Chart_OHLC"]->AxisY->Minimum = Math::Round(min * 0.9, 2);
+    chartMax = Math::Round(min * 0.9, 2);
     // Set the maximum value of the Y-axis of the chart to 110% of the maximum value found
     chart_StockChart->ChartAreas["Chart_OHLC"]->AxisY->Maximum = Math::Round(max * 1.1, 2);
+    chartMin = Math::Round(max * 1.1, 2);
 }
 
 
