@@ -8,7 +8,7 @@ namespace Stonks_Cpp {
 	public:
 		hammerRecognizer();
 
-		// Override method to recognize a bullish pattern for a single candlestick
+		// Override method to recognize a bullish pattern 
 		virtual bool recognize(List<smartCandlestick^>^ sc, int index) override;
 	};
 }
