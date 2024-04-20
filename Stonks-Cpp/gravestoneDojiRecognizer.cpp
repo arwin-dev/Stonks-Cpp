@@ -9,8 +9,18 @@ namespace Stonks_Cpp {
 	}
 
 	// Override method to recognize a gravestone doji pattern for a single candlestick
-	bool gravestoneDojiRecognizer::recognize(smartCandlestick^ cs)
+	bool gravestoneDojiRecognizer::recognize(List<smartCandlestick^>^ sc, int index)
 	{
-		return cs->IsGravestoneDoji; // Check if the candlestick is a gravestone doji
+		smartCandlestick^ sc1 = sc[index];
+		bool value;
+		if (sc1->Patterns->TryGetValue(patternName, value))
+		{
+			return value;
+		}
+		else
+		{
+			sc1->Patterns->Add(patternName, sc1->IsGravestoneDoji);
+			return sc1->IsGravestoneDoji;
+		}
 	}
 }

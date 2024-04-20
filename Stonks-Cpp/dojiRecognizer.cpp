@@ -9,8 +9,18 @@ namespace Stonks_Cpp {
 	}
 
 	// Override method to recognize a doji pattern for a single candlestick
-	bool dojiRecognizer::recognize(smartCandlestick^ cs)
+	bool dojiRecognizer::recognize(List<smartCandlestick^>^ sc, int index)
 	{
-		return cs->IsDoji; // Check if the candlestick is a doji
+		smartCandlestick^ sc1 = sc[index];
+		bool value;
+		if (sc1->Patterns->TryGetValue(patternName, value))
+		{
+			return value;
+		}
+		else
+		{
+			sc1->Patterns->Add(patternName, sc1->IsDoji);
+			return sc1->IsDoji;
+		}
 	}
 }

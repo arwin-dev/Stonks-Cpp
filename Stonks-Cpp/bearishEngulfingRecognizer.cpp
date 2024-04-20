@@ -9,10 +9,10 @@ namespace Stonks_Cpp {
 	}
 
 	// Override method to recognize a bearish engulfing pattern for a list of candlesticks
-	bool bearishEngulfingRecognizer::recognize(List<smartCandlestick^>^ scs, int index)
+	bool bearishEngulfingRecognizer::recognize(List<smartCandlestick^>^ sc, int index)
 	{
 
-		smartCandlestick^ sc1 = scs[index] ;
+		smartCandlestick^ sc1 = sc[index] ;
 		bool value;
 		if (sc1->Patterns->TryGetValue(patternName, value))
 		{
@@ -28,10 +28,10 @@ namespace Stonks_Cpp {
 			}
 			else
 			{
-				smartCandlestick^ sc2 = scs[index - offset];
-				bool bearish_engulfing = (sc2->Close < sc2->Open) && (sc1->Close > sc1->Open) && (sc2->Close < sc1->Open) && (sc2->Open > sc1->Close);
-				sc1->Patterns->Add(patternName, bearish_engulfing);
-				return bearish_engulfing;
+				smartCandlestick^ sc2 = sc[index - offset];
+				bool check = (sc2->Close < sc2->Open) && (sc1->Close > sc1->Open) && (sc2->Close < sc1->Open) && (sc2->Open > sc1->Close);
+				sc1->Patterns->Add(patternName, check);
+				return check;
 			}
 		}
 	}

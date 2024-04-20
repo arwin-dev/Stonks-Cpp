@@ -9,8 +9,18 @@ namespace Stonks_Cpp {
 	}
 
 	// Override method to recognize a marubozu pattern for a single candlestick
-	bool marubozuRecognizer::recognize(smartCandlestick^ cs)
+	bool marubozuRecognizer::recognize(List<smartCandlestick^>^ sc, int index)
 	{
-		return cs->IsMarubozu; // Check if the candlestick is a marubozu
+		smartCandlestick^ sc1 = sc[index];
+		bool value;
+		if (sc1->Patterns->TryGetValue(patternName, value))
+		{
+			return value;
+		}
+		else
+		{
+			sc1->Patterns->Add(patternName, sc1->IsMarubozu);
+			return sc1->IsMarubozu;
+		}
 	}
 }

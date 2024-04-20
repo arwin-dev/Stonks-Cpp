@@ -8,8 +8,18 @@ namespace Stonks_Cpp {
 	}
 
 	// Override method to recognize an inverted hammer pattern for a single candlestick
-	bool invertedHammerRecognizer::recognize(smartCandlestick^ cs)
+	bool invertedHammerRecognizer::recognize(List<smartCandlestick^>^ sc, int index)
 	{
-		return cs->IsInvertedHammer; // Check if the candlestick is an inverted hammer
+		smartCandlestick^ sc1 = sc[index];
+		bool value;
+		if (sc1->Patterns->TryGetValue(patternName, value))
+		{
+			return value;
+		}
+		else
+		{
+			sc1->Patterns->Add(patternName, sc1->IsInvertedHammer);
+			return sc1->IsInvertedHammer;
+		}
 	}
 }

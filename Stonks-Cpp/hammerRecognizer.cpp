@@ -8,8 +8,18 @@ namespace Stonks_Cpp {
 	}
 
 	// Override method to recognize a bullish pattern for a single candlestick
-	bool hammerRecognizer::recognize(smartCandlestick^ cs)
+	bool hammerRecognizer::recognize(List<smartCandlestick^>^ sc, int index)
 	{
-		return cs->IsHammer; // Check if the candlestick is bullish
+		smartCandlestick^ sc1 = sc[index];
+		bool value;
+		if (sc1->Patterns->TryGetValue(patternName, value))
+		{
+			return value;
+		}
+		else
+		{
+			sc1->Patterns->Add(patternName, sc1->IsHammer);
+			return sc1->IsHammer;
+		}
 	}
 }

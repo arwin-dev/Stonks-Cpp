@@ -8,18 +8,30 @@ namespace Stonks_Cpp {
 	}
 
 	// Override method to recognize a bearish harami pattern for a list of candlesticks
-	bool bearishHaramiRecognizer::recognize(List<smartCandlestick^>^ sc)
+	bool bearishHaramiRecognizer::recognize(List<smartCandlestick^>^ sc, int index)
 	{
-		// Check if there are exactly two candlesticks
-		if (sc->Count == 2)
+		smartCandlestick^ sc1 = sc[index];
+		bool value;
+		if (sc1->Patterns->TryGetValue(patternName, value))
 		{
-			smartCandlestick^ sc1 = sc[0];
-			smartCandlestick^ sc2 = sc[1];
-
-			// Check conditions for bearish harami pattern
-			return ((sc2->Close < sc2->Open) && (sc1->Close > sc1->Open) && (sc2->Close > sc1->Open) && (sc2->Open < sc1->Close));
+			return value;
 		}
-
-		return false;
+		else
+		{
+			int offset = patternSize / 2;
+			if (index < offset)
+			{
+				sc1->Patterns->Add(patternName, false);
+				return false;
+			}
+			else
+			{
+				smartCandlestick^ sc2 = sc[index - offset];
+				bool bearish_engulfing = ((sc2->Close < sc2->Open) && (sc1->Close > sc1->Open) && (sc2->Close > sc1->Open) && (sc2->Open < sc1->Close));
+				sc1->Patterns->Add(patternName, bearish_engulfing);
+				return bearish_engulfing;
+			}
+		}
+		
 	}
 }

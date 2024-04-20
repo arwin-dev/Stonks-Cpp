@@ -9,8 +9,18 @@ namespace Stonks_Cpp {
 	}
 
 	// Override method to recognize a bearish pattern for a single candlestick
-	bool bearishRecognizer::recognize(smartCandlestick^ cs)
+	bool bearishRecognizer::recognize(List<smartCandlestick^>^ sc, int index)
 	{
-		return cs->IsBearish; // Check if the candlestick is bearish
+		smartCandlestick^ sc1 = sc[index];
+		bool value;
+		if (sc1->Patterns->TryGetValue(patternName, value))
+		{
+			return value;
+		}
+		else
+		{
+			sc1->Patterns->Add(patternName, sc1->IsBearish);
+			return sc1->IsBearish;
+		}
 	}
 }

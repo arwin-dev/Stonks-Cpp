@@ -8,8 +8,18 @@ namespace Stonks_Cpp {
 	}
 
 	// Override method to recognize a neutral pattern for a single candlestick
-	bool neutralRecognizer::recognize(smartCandlestick^ cs)
+	bool neutralRecognizer::recognize(List<smartCandlestick^>^ sc, int index)
 	{
-		return cs->IsNeutral; // Check if the candlestick is neutral
+		smartCandlestick^ sc1 = sc[index];
+		bool value;
+		if (sc1->Patterns->TryGetValue(patternName, value))
+		{
+			return value;
+		}
+		else
+		{
+			sc1->Patterns->Add(patternName, sc1->IsNeutral);
+			return sc1->IsNeutral;;
+		}
 	}
 }

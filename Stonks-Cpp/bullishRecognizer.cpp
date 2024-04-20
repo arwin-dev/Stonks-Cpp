@@ -9,8 +9,18 @@ namespace Stonks_Cpp {
 	}
 
 	// Override method to recognize a bullish pattern for a single candlestick
-	bool bullishRecognizer::recognize(smartCandlestick^ cs)
+	bool bullishRecognizer::recognize(List<smartCandlestick^>^ sc, int index)
 	{
-		return cs->IsBullish; // Check if the candlestick is bullish
+		smartCandlestick^ sc1 = sc[index];
+		bool value;
+		if (sc1->Patterns->TryGetValue(patternName, value))
+		{
+			return value;
+		}
+		else
+		{
+			sc1->Patterns->Add(patternName, sc1->IsBullish);
+			return sc1->IsBullish;
+		}
 	}
 }

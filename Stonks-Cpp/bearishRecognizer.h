@@ -9,7 +9,7 @@ namespace Stonks_Cpp {
 			bearishRecognizer();
 
 			// Override method to recognize a bearish pattern for a single candlestick
-			virtual bool recognize(smartCandlestick^ cs) override;
+			virtual bool recognize(List<smartCandlestick^>^ sc, int index) override;
 	};
 }
 
