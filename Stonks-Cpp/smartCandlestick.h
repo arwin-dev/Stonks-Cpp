@@ -28,10 +28,10 @@ namespace Stonks_Cpp {
 			property double BottomPrice;
 
 			// Length of the upper tail (wick) of the candlestick
-			property double TopTail;
+			property double UpperTail;
 
 			// Length of the lower tail (wick) of the candlestick
-			property double BottomTail;
+			property double LowerTail;
 
 			// Boolean indicating if the candlestick is bullish
 			property bool IsBullish;

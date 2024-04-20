@@ -197,26 +197,32 @@ System::Void Form_StockView::comboBox_patterns_SelectedIndexChanged(System::Obje
     // Initialize a variable to hold the pattern
     List<smartCandlestick^>^ pattern = nullptr;
 
+    // Loop through each candlestick in the bindingCandlesticks collection
     for (int i = 0; i < bindingCandlesticks->Count; i++)
     {
-        smartCandlestick^ cs = bindingCandlesticks[i];
-        DataPoint^ point = chart_StockChart->Series["Series_OHLC"]->Points[i];
-        
+        smartCandlestick^ cs = bindingCandlesticks[i]; // Current candlestick
+        DataPoint^ point = chart_StockChart->Series["Series_OHLC"]->Points[i]; // DataPoint associated with the candlestick
+
+        // Check if the current candlestick has the selected pattern
         if (cs->Patterns[selectedPattern])
         {
+            // Check if the selected pattern recognizer requires a pattern size greater than 1
             if (selectedRecognizer->patternSize > 1)
             {
+                // Skip the first candlestick if pattern size is 2 or skip first and last if pattern size is 3
                 if (i == 0 || ((i == bindingCandlesticks->Count - 1) && selectedRecognizer->patternSize == 3))
                 {
                     continue;
                 }
 
+                // Create a rectangle annotation for the pattern
                 RectangleAnnotation^ rectangle = gcnew RectangleAnnotation();
-                rectangle->SetAnchor(point);
+                rectangle->SetAnchor(point); // Set the anchor point of the rectangle to the current DataPoint
                 double Ymax, Ymin;
-                double width = (90.0 / bindingCandlesticks->Count) * selectedRecognizer->patternSize;
+                double width = (90.0 / bindingCandlesticks->Count) * selectedRecognizer->patternSize; // Calculate width of the rectangle
                 if (selectedRecognizer->patternSize == 2)
                 {
+                    // For pattern size of 2, calculate Ymax and Ymin from current and previous candlesticks
                     Ymax = (int)(Math::Max(cs->High, bindingCandlesticks[i - 1]->High));
                     Ymin = (int)(Math::Min(cs->Low, bindingCandlesticks[i - 1]->Low));
                     rectangle->AnchorOffsetX = ((width / selectedRecognizer->patternSize) / 2 - 0.25) * (-1);
@@ -224,30 +230,34 @@ System::Void Form_StockView::comboBox_patterns_SelectedIndexChanged(System::Obje
                 }
                 else
                 {
+                    // For pattern size of 3, calculate Ymax and Ymin from current, previous, and next candlesticks
                     Ymax = (int)(Math::Max(cs->High, Math::Max(bindingCandlesticks[i + 1]->High, bindingCandlesticks[i - 1]->High)));
                     Ymin = (int)(Math::Min(cs->Low, Math::Min(bindingCandlesticks[i + 1]->Low, bindingCandlesticks[i - 1]->Low)));
                 }
 
-                double height = 40.0 * (Ymax - Ymin) / (chartMax - chartMin); ; //Scale height to chart bounds
-                rectangle->Height = -height; 
-                rectangle->Width = width;             //Set width and hight
-                rectangle->Y = Ymax;                                             //Set Y to highest Y value for candlesticks
-                rectangle->BackColor = Color::Transparent;                        //Set area to transparent to see chart
-                rectangle->LineWidth = 2;                                        //Set perimeter width
-                rectangle->LineDashStyle = ChartDashStyle::Dash;                  //Set perimeter style to dashed
-                rectangle->AnchorOffsetY = 10;
-                //Add annotation to chart
+                // Calculate height of the rectangle
+                double height = 40.0 * (Ymax - Ymin) / (chartMax - chartMin);
+                rectangle->Height = -height; // Set the height of the rectangle
+                rectangle->Width = width; // Set the width of the rectangle
+                rectangle->Y = Ymax; // Set the Y-coordinate of the rectangle
+                rectangle->BackColor = Color::Transparent; // Set the background color of the rectangle
+                rectangle->LineWidth = 2; // Set the line width of the rectangle
+                rectangle->LineDashStyle = ChartDashStyle::Dash; // Set the line dash style of the rectangle
+                rectangle->AnchorOffsetY = 10; // Set the anchor offset Y-coordinate of the rectangle
+                // Add the rectangle annotation to the chart
                 chart_StockChart->Annotations->Add(rectangle);
             }
-            
+
+            // Create additional annotations for the candlestick
             CreateAnnotation(cs, "");
-            
+
         }
     }
 
-    // Refresh the chart to reflect the changes
+    // Refresh the chart to reflect changes
     chart_StockChart->Refresh();
 }
+
 
 
 
@@ -279,48 +289,7 @@ void Form_StockView::CreateAnnotation(smartCandlestick^ cs, String^ PatternName)
     arrowAnnotation->ClipToChartArea = "Chart_OHLC"; // Clip the annotation to the specified chart area
     chart_StockChart->Annotations->Add(arrowAnnotation); // Add the arrow annotation to the chart
 
-    // If a pattern name is provided, create a text annotation
-    if (!String::IsNullOrEmpty(PatternName) && !String::IsNullOrWhiteSpace(PatternName))
-    {
-        TextAnnotation^ label = gcnew TextAnnotation();
-        label->AxisX = arrowAnnotation->AxisX;
-        label->AxisY = arrowAnnotation->AxisY;
-        label->Text = PatternName; // Set the text of the annotation to the provided pattern name
-        label->ForeColor = Color::Black; // Set the text color
-        label->Font = gcnew System::Drawing::Font("Arial", 8); // Set the font and size
-        label->AnchorOffsetY = -10; // Offset the text annotation vertically
-        label->AnchorAlignment = ContentAlignment::TopCenter; // Set the alignment of the text annotation
-        label->AnchorDataPoint = chart_StockChart->Series["Series_OHLC"]->Points[index]; // Anchor the text annotation to the same data point as the arrow annotation
-        label->ClipToChartArea = "Chart_OHLC"; // Clip the annotation to the specified chart area
-        chart_StockChart->Annotations->Add(label); // Add the text annotation to the chart
-    }
 }
-
-
-/// <summary>
-/// Creates annotations for a list of candlesticks, adding pattern names where applicable.
-/// </summary>
-/// <param name="cs">The list of candlesticks.</param>
-/// <param name="patternName">The name of the pattern to be added to annotations.</param>
-void Form_StockView::CreateListOfAnnotations(List<smartCandlestick^>^ cs, String^ patternName)
-{
-    // Check the number of candlesticks in the list
-    if (cs->Count == 2)
-    {
-        // If there are two candlesticks, create annotations for each
-        CreateAnnotation(cs[0], ""); // Create annotation for the first candlestick without pattern name
-        CreateAnnotation(cs[1], patternName); // Create annotation for the second candlestick with pattern name
-    }
-    else if (cs->Count == 3)
-    {
-        // If there are three candlesticks, create annotations for each
-        CreateAnnotation(cs[0], ""); // Create annotation for the first candlestick without pattern name
-        CreateAnnotation(cs[1], patternName); // Create annotation for the second candlestick with pattern name
-        CreateAnnotation(cs[2], ""); // Create annotation for the third candlestick without pattern name
-    }
-}
-
-
 
 /// <summary>
 /// Normalizes the Y-axis range of the chart to ensure all data points are visible with some padding.
@@ -470,6 +439,7 @@ List<smartCandlestick^>^ Form_StockView::getStockDataFromFilename(String^ filena
 
     for each (recognizer^ r in recognizerTracker)
     {
+        // Call the recognizeAll method of the recognizer to identify patterns in the listOfCandlesticks
         r->recognizeAll(listOfCandlesticks);
     }
 

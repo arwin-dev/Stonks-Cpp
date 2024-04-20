@@ -288,9 +288,6 @@ namespace Stonks_Cpp {
 			// Creates an arrow annotation on the chart to highlight a specific candlestick.
 			void CreateAnnotation(smartCandlestick^ cs, String^ patternName);
 
-			// Creates a list of annotations for multi-candlestick patterns
-			void CreateListOfAnnotations(List<smartCandlestick^>^ cs, String^ patternName);
-
 			// Normalizes the Y-axis range of the chart to ensure all data points are visible with some padding.
 			void normalizeChart();
 };

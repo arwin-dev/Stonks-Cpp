@@ -16,7 +16,7 @@ namespace Stonks_Cpp {
         Range = High - Low;
 
         // Range of the body of the candlestick
-        BodyRange = Math::Abs(Close - Open);
+        
 
         // Highest price point of the candlestick
         TopPrice = Math::Max(Open, Close);
@@ -24,11 +24,13 @@ namespace Stonks_Cpp {
         // Lowest price point of the candlestick
         BottomPrice = Math::Min(Open, Close);
 
+        BodyRange = TopPrice - BottomPrice;
+
         // Length of the upper tail (wick) of the candlestick
-        TopTail = High - Math::Max(Open, Close);
+        UpperTail = High - TopPrice;
 
         // Length of the lower tail (wick) of the candlestick
-        BottomTail = Math::Min(Open, Close) - Low;
+        LowerTail = BottomPrice - Low;
 
         // Determine if the candlestick is bullish
         IsBullish = Close > Open;
@@ -55,13 +57,13 @@ namespace Stonks_Cpp {
         IsDragonFlyDoji = lowerShadowRatio >= 0.98 && upperShadowRatio < 0.02;
 
         // Determine if the candlestick is a gravestone doji
-        IsGravestoneDoji = IsDoji && TopTail > (0.70 * Range);
+        IsGravestoneDoji = IsDoji && UpperTail > (0.70 * Range);
 
         // Determine if the candlestick is a hammer
-        IsHammer = BottomTail > (High - Low) * 0.6 && TopTail < (High - Low) * 0.1;
+        IsHammer = LowerTail > (High - Low) * 0.6 && UpperTail < (High - Low) * 0.1;
 
         // Determine if the candlestick is an inverted hammer
-        IsInvertedHammer = TopTail > (High - Low) * 0.6 && BottomTail < (High - Low) * 0.1;
+        IsInvertedHammer = UpperTail > (High - Low) * 0.6 && LowerTail < (High - Low) * 0.1;
 
         // Initialize the dictionary to store candlestick patterns
         Patterns = gcnew Dictionary<String^, bool>();
